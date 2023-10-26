@@ -1,0 +1,28 @@
+{
+  "name": "readme-bot",
+  "version": "1.0.1",
+  "description": "This node script application will generate the Readme file. This is part of my assignment at Carleton Coding Bootcamp",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gusmiller/Readme-Bot.git"
+  },
+  "keywords": [
+    "readmegen",
+    "readmebot"
+  ],
+  "author": "Gustavo Miller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gusmiller/Readme-Bot/issues"
+  },
+  "homepage": "https://github.com/gusmiller/Readme-Bot#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.2.5"
+  }
+}
