@@ -22,6 +22,7 @@
   "homepage": "https://github.com/gusmiller/Readme-Bot#readme",
   "dependencies": {
     "chalk": "^4.1.2",
+    "dotenv": "^16.3.1",
     "inquirer": "^8.2.4",
     "mysql2": "^2.2.5"
   }

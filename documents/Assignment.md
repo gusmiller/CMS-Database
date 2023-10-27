@@ -6,7 +6,11 @@ Developers frequently have to create interfaces that allow non-developers to eas
 
 Because this Challenge will require the use of the `Inquirer` package, ensure that you install and use Inquirer version 8.2.4. To do so, use the following command in your project folder: `npm i inquirer@8.2.4`.
 
-Because this application won’t be deployed, you’ll also need to create a walkthrough video that demonstrates its functionality and all of the following acceptance criteria being met. You’ll need to submit a link to the video and add it to the README of your project.
+Because this application <span style="color:red">won’t be deployed</span>, you’ll need: 
+1. Create a **walkthrough video** 
+2. Demonstrates its functionality and all of the following acceptance criteria being met. 
+3. Submit a link to the video
+4. Add it to the README of your project.
 
 ## Mock-Up
 

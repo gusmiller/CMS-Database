@@ -8,6 +8,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const dotenv = require('dotenv')
 
 // fs is a Node standard library package for reading and writing files
 const fs = require('fs');
