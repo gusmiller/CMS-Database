@@ -21,7 +21,7 @@ const pool = require('./utils/database');
 // The fs.readFileSync() method is an inbuilt application programming interface of 
 // the fs module which is used to read the file and return its content. 
 // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
-const sSql = fs.readFileSync('./db/schema.sql')
+const sSql = fs.readFileSync("./db/schema.sql", "utf8");
 const databaseName = 'employees_db';
 
 const initializeDb = async function () {
@@ -40,7 +40,11 @@ const initializeDb = async function () {
         await connection.query(`CREATE DATABASE ${databaseName}`);
         console.log(`Database "${databaseName}" created.`);
     } else {
-        console.log(`Database "${databaseName}" already exists.`);
+
+        await connection.query(`USE ${databaseName}`);
+        await connection.query('CREATE TABLE IF NOT EXISTS `department` (`id` INT AUTO_INCREMENT, `name` varchar(30) NOT NULL, PRIMARY KEY (`id`));');
+        
+        console.log("Tables created!");
     }
 };
 
