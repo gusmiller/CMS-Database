@@ -1,5 +1,5 @@
 {
-  "name": "readme-bot",
+  "name": "CMS-Database",
   "version": "1.0.1",
   "description": "This node script application will create the employees database and allow user to add information to tables using inquirer. This is part of my assignment at Carleton Coding Bootcamp",
   "main": "index.js",
@@ -11,15 +11,16 @@
     "url": "git+https://github.com/gusmiller/CMS-Database.git"
   },
   "keywords": [
-    "readmegen",
-    "readmebot"
+    "cms",
+    "content management systems",
+    "employees"
   ],
   "author": "Gustavo Miller",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gusmiller/Readme-Bot/issues"
+    "url": "https://github.com/gusmiller/CMS-Database/issues"
   },
-  "homepage": "https://github.com/gusmiller/Readme-Bot#readme",
+  "homepage": "https://github.com/gusmiller/CMS-Database#readme",
   "dependencies": {
     "chalk": "^4.1.2",
     "dotenv": "^16.3.1",
