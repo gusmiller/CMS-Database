@@ -7,19 +7,20 @@
  *******************************************************************/
 const db = require("./connect");
 
-class Data {
-    constructor(title, body) {
-        this.title = title;
-        this.body = body;
-    }
+async function getTable(value) {
+  const connection = await db();
 
-    static listALLTable(source) {
-        
-        let sql = `SELECT * FROM ${source};`;
-        
-        return db.execute(sql);
+  try {
 
-    }
+      const [rows, fields] = await connection.execute(`SELECT * FROM ${value}`);
+      return {count: rows.length, rows};
+
+  } catch (error) {
+      console.error('Error retrieving data:', error);
+
+  } finally {
+      connection.end(); // Close the database connection when done
+  }
 }
 
-module.exports = Data;
+module.exports = {getTable};

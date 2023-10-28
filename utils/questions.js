@@ -10,6 +10,9 @@
  * application will loop through 
  *******************************************************************/
 const chalk = require('chalk');
+const data = require("./data");
+
+const employees = data.getEmployees;
 
 const actionlist = [
 
@@ -73,7 +76,7 @@ const roles = [
             return answer.rolename.length !=0;
         },
         validate(answer) {
-            if (answer == 0) {
+            if (answer == 0 || !isNumeric(answer)) {
                 return chalk.red('You must provide a valid Salary amount! Press Ctrl-C to cancel');
             }
             return true;
@@ -105,6 +108,8 @@ const employee = [
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid name! Press Ctrl-C to cancel');
+            } else if(answer.length == 1){
+                return chalk.red('Name cannot be an initial! Press Ctrl-C to cancel');
             }
             return true;
         }
@@ -139,7 +144,27 @@ const employee = [
             return true;
         }
 
+    },
+    ,
+    {
+        type: "input",
+        name: "manager",
+        message: chalk.magenta("Who will be their manager?:"),
+        when(answer) {
+            return answer.firstname.length !=0 && answer.lastname.length !=0;
+        },
+        validate(answer) {
+            if (answer.length == 0) {
+                return chalk.red('You must provide Managers Name! Press Ctrl-C to cancel');
+            }
+            return true;
+        }
+
     }
 ]
+
+function isNumeric(input) {
+    return /^[0-9]+(\.[0-9]+)?$/.test(input);
+  }
 
 module.exports = { action, department, roles, employee }
