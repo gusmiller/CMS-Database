@@ -24,25 +24,52 @@ WHEN I start the application<br/>
 * update an employee role
 
 WHEN I choose to view all departments<br/>
-<span style="color:yellow;">THEN I am presented with a formatted table showing department names and department ids</span>
+<span style="color:yellow;">THEN I am presented with a formatted table showing 
+* department names and 
+* department ids</span>
 
 WHEN I choose to view all roles<br/>
-<span style="color:yellow;">THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role</span>
+<span style="color:yellow;">THEN I am presented with the 
+* job title, 
+* role id, 
+* the department that role belongs to,
+* the salary for that role</span>
 
 WHEN I choose to view all employees<br/>
-<span style="color:yellow;">THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to</span>
+<span style="color:yellow;">THEN I am presented with a formatted table showing employee data, 
+* including employee ids, 
+* first names, 
+* last names, 
+* job titles, 
+* departments, 
+* salaries, and 
+* managers that the employees report to</span>
 
 WHEN I choose to add a department<br/>
-<span style="color:yellow;">THEN I am prompted to enter the name of the department and that department is added to the database</span>
+<span style="color:yellow;">THEN I am prompted to enter the </span>
+* name of the department
+<span style="color:green;">department is added to the database</span>
 
 WHEN I choose to add a role<br/>
-<span style="color:yellow;">THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database</span>
+<span style="color:yellow;">THEN I am prompted to enter the </span>
+* name, 
+* salary, and 
+* department for the role 
+<span style="color:green;">role is added to the database</span>
 
 WHEN I choose to add an employee<br/>
-<span style="color:yellow;">THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database</span>
+<span style="color:yellow;">THEN I am prompted to enter the employee’s</span>
+* first name, 
+* last name, 
+* role, and 
+* manager, 
+<span style="color:green;">employee is added to the database</span>
 
 WHEN I choose to update an employee role<br/>
-<span style="color:yellow;">THEN I am prompted to select an employee to update and their new role and this information is updated in the database</span>
+<span style="color:yellow;">THEN I am prompted to select an</span>
+* employee to update
+* their new role
+<span style="color:green;">information is updated in the database</span>
 
 - - -
 © 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
