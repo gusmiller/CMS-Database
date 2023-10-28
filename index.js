@@ -53,6 +53,7 @@ async function getTable(value) {
 async function init() {
     let exit = false;
     let response;
+    let resultArr;
 
     process.stdout.write("\x1Bc");
 
@@ -103,7 +104,7 @@ async function init() {
                     }
                 }
                 break;
-                
+
             case "Add a Department":
                 const departmentresponse = await inquirer.prompt(questions.department);
                 response = await dataset.addDepartment(departmentresponse.department);
@@ -111,27 +112,52 @@ async function init() {
                 break;
 
             case "Add a Role":
-                const resultArr = await dataset.loadDepartments();
+                resultArr = await dataset.loadDepartments();
                 const rolesresponse = await inquirer.prompt(questions.roles);
                 response = await dataset.addRole(rolesresponse);
                 console.log(response);
                 break;
 
             case "Add an Employee":
-                const empresponse = await inquirer.prompt(questions.employee);
-                console.log(empresponse);
-                console.log("Add an Employee")
+                resultArr = await dataset.loadRoles();
+                resultArr = await dataset.loadEmployees();
+
+                const employeeresponse = await inquirer.prompt(questions.employee);
+                response = await dataset.addEmployee(employeeresponse);
+                console.log(response);
                 break;
+
             case "Update an Employee Role":
-                console.log("Update an Employee Role")
+                resultArr = await dataset.loadEmployees();
+                const usereesponse = await inquirer.prompt(questions.updateEmployee);
+
+                resultArr = await dataset.loadRoles(usereesponse);
+                const roleupdate = await inquirer.prompt(questions.updateRole);
+                console.log(usereesponse, roleupdate);
+                console.log(response);
+
+                // resultArr = await dataset.loadEmployees();
+                // const usereesponse = await inquirer.prompt(questions.updateemployee);
+
+                // resultArr = await dataset.loadRoles(usereesponse);
+                // let updaterole = await inquirer.prompt(questions.changerole);
+                // updateemployee
+                // response = await dataset.addEmployee(employeeresponse);
+                // console.log(response);
                 break;
+
             case "Finish":
                 process.stdout.write("\x1Bc");
                 console.log("Thank you for participating!")
                 exit = true;
+                break;
+
+            case "Clear Terminal":
+                process.stdout.write("\x1Bc");
                 break;
         }
     }
 }
 
 init().catch((error) => console.error(error));
+

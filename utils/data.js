@@ -9,7 +9,9 @@ const mysql = require("mysql2");
 const db = require("./connect");
 const chalk = require("chalk");
 
-const departmentsArray = []
+const departmentsArray = [];
+const rolesArray = [];
+const employeeArray = [];
 
 async function getTable(value) {
     const connection = await db();
@@ -27,12 +29,41 @@ async function getTable(value) {
     }
 }
 
-async function loadDepartments(){
+async function loadDepartments() {
     const connection = await db();
 
     const [rows, fields] = await connection.execute("SELECT name FROM department");
     for (const row of rows) {
         departmentsArray.push(row.name);
+    }
+
+}
+
+async function loadRoles(value) {
+    const connection = await db();
+
+    if (value=== undefined){
+        const [rows, fields] = await connection.execute("SELECT title FROM role");
+        for (const row of rows) {
+            rolesArray.push(row.title);
+        }    
+    } else {
+        const splitName = value.updateemployee.split(' ');
+        const [rows, fields] = await connection.execute(`SELECT title FROM role WHERE id<>(SELECT role_id FROM employee ` + 
+            `WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}");`);
+        for (const row of rows) {
+            rolesArray.push(row.title);
+        }    
+    }
+
+}
+
+async function loadEmployees() {
+    const connection = await db();
+
+    const [rows, fields] = await connection.execute(`SELECT CONCAT_WS( " ", first_name, last_name ) as Fullname FROM employee;`);
+    for (const row of rows) {
+        employeeArray.push(row.Fullname);
     }
 
 }
@@ -57,12 +88,46 @@ async function addDepartment(name) {
     }
 }
 
+async function addEmployee(value) {
+    const connection = await db();
+
+    try {
+        let sSql = `SELECT id FROM employee WHERE first_name="${value.firstname}" AND last_name="${value.lastname}"`
+        const [rows, fields] = await connection.execute(sSql);
+
+        if (rows.length != 0) {
+            return chalk.bgRed(`Employee ${value.firstname} ${value.lastname} (ID:${rows[0].id}) already exists!\n`);
+        } else {
+
+            if (value.manager !== undefined) {
+                const splitName = value.manager.split(',');
+
+                sSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ` +
+                    `("${value.firstname}", "${value.lastname}", ` +
+                    `(SELECT id FROM role WHERE title="${value.rolename}"), ` +
+                    `(SELECT id FROM employee WHERE first_name="${splitName[1]}" AND last_name="${splitName[0]}"));`
+            } else {
+                sSql = `INSERT INTO employee (first_name, last_name, role_id) VALUES ` +
+                    `("${value.firstname}", "${value.lastname}", (SELECT id FROM role WHERE title="${value.rolename}"));`
+            }
+
+            await connection.execute(sSql);
+            return chalk.green(`Employee ${value.firstname} ${value.lastname} has been added!\n`);
+        }
+    } catch (error) {
+        console.error(chalk.red('Error retrieving data:', error));
+
+    } finally {
+        connection.end(); // Close the database connection when done
+    }
+}
+
 async function addRole(value) {
     const connection = await db();
-    
+
     try {
         let sSql = `SELECT id FROM role ` +
-            `WHERE title="${value.rolename}" AND ` + 
+            `WHERE title="${value.rolename}" AND ` +
             `department_id=(SELECT id FROM department WHERE name="${value.department}");`
         const [rows, fields] = await connection.execute(sSql);
 
@@ -83,11 +148,16 @@ async function addRole(value) {
     }
 }
 
-async function test() {
+async function updateEmployee(value) {
     const connection = await db();
-    
+
     try {
-        const [rows, fields] = await connection.execute(`SELECT * FROM department`);
+        sSql = `INSERT INTO role (title, salary, department_id) VALUES` +
+            `("${value.rolename}",${value.salary},(SELECT id FROM department WHERE name="${value.department}"));`
+
+        await connection.execute(sSql);
+        return chalk.green(`The role ${value.rolename} has been added to ${value.department}!\n`);
+
     } catch (error) {
         console.error(chalk.red('Error retrieving data:', error));
 
@@ -96,4 +166,4 @@ async function test() {
     }
 }
 
-module.exports = { getTable, addDepartment, addRole, departmentsArray, loadDepartments, test };
+module.exports = { getTable, addDepartment, addRole, departmentsArray, loadDepartments, rolesArray, loadRoles, addEmployee, employeeArray, loadEmployees, updateEmployee };
