@@ -5,7 +5,7 @@
  * Assignment #12 - SQL Content Management Systems (CMS)
  * Date : 10/26/2023 10:03:23 PM
  *******************************************************************/
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 // Dotenv is a zero-dependency module that loads environment variables from 
 // a .env file into process.env. Storing configuration in the environment 
@@ -25,4 +25,9 @@ var pool = mysql.createPool({
     database: process.env.DB_NAME
 });
 
-module.exports = pool.promise();
+exports.getEmployees = async () => {
+
+    let sql = "SELECT * FROM employee;";
+    const res = await pool.execute(sql);
+    
+};

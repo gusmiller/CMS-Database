@@ -5,7 +5,7 @@
  * Assignment #12 - SQL Content Management Systems (CMS)
  * Date : 10/26/2023 10:03:23 PM
  *******************************************************************/
-const db = require('./connect');
+const db = require("./connect");
 
 class Data {
     constructor(title, body) {
