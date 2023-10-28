@@ -10,9 +10,7 @@
  * application will loop through 
  *******************************************************************/
 const chalk = require('chalk');
-const data = require("./data");
-
-const employees = data.getEmployees;
+const dataset = require("./data");
 
 const actionlist = [
 
@@ -87,9 +85,7 @@ const roles = [
         type: "list",
         name: "department",
         message: chalk.magenta("Please enter Name of Department:"),
-        when(answer) {
-            return answer.rolename.length !=0 && answer.rolename.salary > 0;
-        },
+        choices: dataset.departmentsArray,
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid Department Name! Press Ctrl-C to cancel');
@@ -162,6 +158,10 @@ const employee = [
 
     }
 ]
+
+function testing(){
+
+}
 
 function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);

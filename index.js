@@ -15,6 +15,7 @@ require("dotenv").config();
 // Include packages needed for this application
 const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
+const chalk = require("chalk");
 
 // fs is a Node standard library package for reading and writing files
 const fs = require("fs");
@@ -23,9 +24,11 @@ const fs = require("fs");
 // the fs module which is used to read the file and return its content. 
 // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
 const sSql = fs.readFileSync("./db/schema.sql", "utf8");
+
 const questions = require("./utils/questions");
 const connectDb = require("./utils/connect");
 const dataset = require("./utils/data");
+const format = require("./helpers/formatter")
 
 async function getTable(value) {
     const connection = await connectDb();
@@ -49,6 +52,7 @@ async function getTable(value) {
  */
 async function init() {
     let exit = false;
+    let response;
 
     process.stdout.write("\x1Bc");
 
@@ -58,27 +62,65 @@ async function init() {
         switch (answer.actionperform) {
             case "View All Employees":
                 const dsEmployee = await dataset.getTable("employee");
-                console.log(dsEmployee);
+                if (dsEmployee.count == 0) {
+                    format.nodata("No Records found in the Employee's table");
+                } else {
+                    console.log("Information from Employees Table");
+                    console.log("");
+                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department Name", 50)}`));
+                    for (const row of dsDepartment.rows) {
+                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 50)}`);
+                    }
+                    console.log("");
+                }
                 break;
+
             case "View All Departments":
                 const dsDepartment = await dataset.getTable("department");
-                console.log(dsDepartment);
+                if (dsDepartment.count == 0) {
+                    format.nodata("No Records found in the Department's table");
+                } else {
+                    console.log("Information from Department Table");
+                    console.log("");
+                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department Name", 50)}`));
+                    for (const row of dsDepartment.rows) {
+                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 50)}`);
+                    }
+                    console.log("");
+                }
                 break;
+
             case "View All Roles":
                 const dsRoles = await dataset.getTable("role");
-                console.log(dsRoles);
+                if (dsRoles.count == 0) {
+                    format.nodata("No Records found in the Roles table");
+                } else {
+                    console.log("Information from Roles Table");
+                    console.log("")
+                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Role Name", 50)} ${format.resize("Salary", 15)}`));
+                    for (const row of dsRoles.rows) {
+                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.title, 50)} ${format.money(row.salary)}`);
+                    }
+                }
                 break;
+                
             case "Add a Department":
-                console.log("Add a Department")
                 const departmentresponse = await inquirer.prompt(questions.department);
+                response = await dataset.addDepartment(departmentresponse.department);
+                console.log(response);
                 break;
+
             case "Add a Role":
-                console.log("Add a Role")
+                const resultArr = await dataset.loadDepartments();
                 const rolesresponse = await inquirer.prompt(questions.roles);
+                response = await dataset.addRole(rolesresponse);
+                console.log(response);
                 break;
+
             case "Add an Employee":
-                console.log("Add an Employee")
                 const empresponse = await inquirer.prompt(questions.employee);
+                console.log(empresponse);
+                console.log("Add an Employee")
                 break;
             case "Update an Employee Role":
                 console.log("Update an Employee Role")
