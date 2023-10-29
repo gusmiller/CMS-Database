@@ -53,6 +53,7 @@ async function getTable(value) {
 async function init() {
     let exit = false;
     let response;
+    let resultArr;
 
     process.stdout.write("\x1Bc");
 
@@ -61,15 +62,18 @@ async function init() {
 
         switch (answer.actionperform) {
             case "View All Employees":
-                const dsEmployee = await dataset.getTable("employee");
+                const sEmpSql = `SELECT E.id, CONCAT_WS( " ", E.first_name, E.last_name ) as Fullname, r.title, d.name, r.salary, CASE WHEN ISNULL(M.first_name) THEN "No Manager" ELSE CONCAT_WS( " ", M.first_name, M.last_name ) END AS Manager FROM employee E JOIN role R ON R.id=E.role_id JOIN department D ON D.id=R.department_id LEFT JOIN employee M ON M.id=E.manager_id`
+                const dsEmployee = await dataset.getTable(sEmpSql);
                 if (dsEmployee.count == 0) {
                     format.nodata("No Records found in the Employee's table");
                 } else {
                     console.log("Information from Employees Table");
                     console.log("");
-                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department Name", 50)}`));
-                    for (const row of dsDepartment.rows) {
-                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 50)}`);
+                    
+                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role Title", 30)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 12)} ${format.resize("Manager", 25)}`));
+
+                    for (const row of dsEmployee.rows) {
+                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.title, 30)} ${format.resize(row.name, 30)} ${format.money(row.salary)}   ${format.resize(row.Manager, 25)}`);
                     }
                     console.log("");
                 }
@@ -91,19 +95,21 @@ async function init() {
                 break;
 
             case "View All Roles":
-                const dsRoles = await dataset.getTable("role");
+                const sSql = `SELECT R.title, R.id, D.name, R.salary FROM role R JOIN department D ON D.id=R.department_id`
+                const dsRoles = await dataset.getTable(sSql);
                 if (dsRoles.count == 0) {
                     format.nodata("No Records found in the Roles table");
                 } else {
                     console.log("Information from Roles Table");
                     console.log("")
-                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Role Name", 50)} ${format.resize("Salary", 15)}`));
+                    console.log(chalk.bgCyan(`${format.resize("Role Tile", 40)} ${format.resize("ID", 5)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 15)}`));
                     for (const row of dsRoles.rows) {
-                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.title, 50)} ${format.money(row.salary)}`);
+                        console.log(`${format.resize(row.title, 40)} ${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 30)} ${format.money(row.salary)}`);
                     }
+                    console.log(chalk.bgCyan(`Total Roles ${format.resize(dsRoles.count.toString() + " records", 70)} ${". "}\n`));
                 }
                 break;
-                
+
             case "Add a Department":
                 const departmentresponse = await inquirer.prompt(questions.department);
                 response = await dataset.addDepartment(departmentresponse.department);
@@ -111,27 +117,52 @@ async function init() {
                 break;
 
             case "Add a Role":
-                const resultArr = await dataset.loadDepartments();
+                resultArr = await dataset.loadDepartments();
                 const rolesresponse = await inquirer.prompt(questions.roles);
                 response = await dataset.addRole(rolesresponse);
                 console.log(response);
                 break;
 
             case "Add an Employee":
-                const empresponse = await inquirer.prompt(questions.employee);
-                console.log(empresponse);
-                console.log("Add an Employee")
+                resultArr = await dataset.loadRoles();
+                resultArr = await dataset.loadEmployees();
+
+                const employeeresponse = await inquirer.prompt(questions.employee);
+                response = await dataset.addEmployee(employeeresponse);
+                console.log(response);
                 break;
+
             case "Update an Employee Role":
-                console.log("Update an Employee Role")
+                resultArr = await dataset.loadEmployees();
+                const usereesponse = await inquirer.prompt(questions.updateEmployee);
+
+                resultArr = await dataset.loadRoles(usereesponse);
+                const roleupdate = await inquirer.prompt(questions.updateRole);
+                console.log(usereesponse, roleupdate);
+                console.log(response);
+
+                // resultArr = await dataset.loadEmployees();
+                // const usereesponse = await inquirer.prompt(questions.updateemployee);
+
+                // resultArr = await dataset.loadRoles(usereesponse);
+                // let updaterole = await inquirer.prompt(questions.changerole);
+                // updateemployee
+                // response = await dataset.addEmployee(employeeresponse);
+                // console.log(response);
                 break;
+
             case "Finish":
                 process.stdout.write("\x1Bc");
                 console.log("Thank you for participating!")
                 exit = true;
+                break;
+
+            case "Clear Terminal":
+                process.stdout.write("\x1Bc");
                 break;
         }
     }
 }
 
 init().catch((error) => console.error(error));
+

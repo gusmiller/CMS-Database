@@ -21,12 +21,31 @@ const actionlist = [
     "Add a Role",
     "Add an Employee",
     "Update an Employee Role",
-    "Finish"
+    "Finish",
+    "Clear Terminal"
 ]
 
 let hours = new Date().getHours();
 hours = (hours + 24 - 2) % 24;
 const ampm = (hours >= 12) ? "afternoon," : "morning,";
+
+const updateEmployee = [
+    {
+        type: 'list',
+        name: 'updateemployee',
+        message: chalk.blue(`Select the Employee you like to update?`),
+        choices: dataset.employeeArray
+    }
+]
+
+const updateRole = [
+    {
+        type: 'list',
+        name: 'updaterole',
+        message: chalk.blue(`Select the new Role for the selected Employee?`),
+        choices: dataset.rolesArray
+    }
+]
 
 const action = [
     {
@@ -46,7 +65,10 @@ const department = [
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid name for Department! Press Ctrl-C to cancel');
+            } else if (answer.length < 5 || answer.length > 30) {
+                return chalk.red('Department name has to be between 5 to 30 characters! Press Ctrl-C to cancel');
             }
+
             return true;
         }
 
@@ -61,6 +83,8 @@ const roles = [
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid Role name! Press Ctrl-C to cancel');
+            } else if (answer.length < 5 || answer.length > 120) {
+                return chalk.red('Role name has to be between 5 to 120 characters! Press Ctrl-C to cancel');
             }
             return true;
         }
@@ -71,7 +95,7 @@ const roles = [
         name: "salary",
         message: chalk.magenta("Please enter Role's base Salary:"),
         when(answer) {
-            return answer.rolename.length !=0;
+            return answer.rolename.length != 0;
         },
         validate(answer) {
             if (answer == 0 || !isNumeric(answer)) {
@@ -100,12 +124,12 @@ const employee = [
     {
         type: "input",
         name: "firstname",
-        message: chalk.magenta("Please enter Employee's First name to add:"),
+        message: chalk.greenBright("Please enter Employee's First name to add:"),
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid name! Press Ctrl-C to cancel');
-            } else if(answer.length == 1){
-                return chalk.red('Name cannot be an initial! Press Ctrl-C to cancel');
+            } else if (answer.length < 3 || answer.length > 30) {
+                return chalk.red('First name has to be between 5 to 30 characters! Press Ctrl-C to cancel');
             }
             return true;
         }
@@ -114,24 +138,27 @@ const employee = [
     {
         type: "input",
         name: "lastname",
-        message: chalk.magenta("Please enter Last name to add:"),
+        message: chalk.greenBright("Please enter Last name to add:"),
         when(answer) {
-            return answer.firstname.length !=0;
+            return answer.firstname.length != 0;
         },
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid last name! Press Ctrl-C to cancel');
+            } else if (answer.length < 2 || answer.length > 30) {
+                return chalk.red('Last name has to be between 2 to 30 characters! Press Ctrl-C to cancel');
             }
             return true;
         }
 
     },
     {
-        type: "input",
+        type: "list",
         name: "rolename",
-        message: chalk.magenta("Please enter what would be their Role:"),
+        message: chalk.greenBright("Please enter what would be their Role:"),
+        choices: dataset.rolesArray,
         when(answer) {
-            return answer.firstname.length !=0 && answer.lastname.length !=0;
+            return answer.firstname.length != 0 && answer.lastname.length != 0;
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -141,13 +168,13 @@ const employee = [
         }
 
     },
-    ,
     {
-        type: "input",
+        type: "list",
         name: "manager",
-        message: chalk.magenta("Who will be their manager?:"),
+        message: chalk.greenBright("Who will be their manager?:"),
+        choices: dataset.employeeArray,
         when(answer) {
-            return answer.firstname.length !=0 && answer.lastname.length !=0;
+            return dataset.employeeArray.length != 0;
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -159,12 +186,8 @@ const employee = [
     }
 ]
 
-function testing(){
-
-}
-
 function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
-  }
+}
 
-module.exports = { action, department, roles, employee }
+module.exports = { action, department, roles, employee, updateEmployee, updateRole }
