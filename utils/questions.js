@@ -21,6 +21,8 @@ const actionlist = [
     "Add a Role",
     "Add an Employee",
     "Update an Employee Role",
+    chalk.green("View Data"),
+    chalk.red("Delete Data"),
     "Finish",
     "Clear Terminal"
 ]
@@ -29,11 +31,61 @@ let hours = new Date().getHours();
 hours = (hours + 24 - 2) % 24;
 const ampm = (hours >= 12) ? "afternoon," : "morning,";
 
+const viewdata = [
+    {
+        type: 'list',
+        name: 'actionperform',
+        message: chalk.blue(`What information would you like to see?`),
+        choices: [
+            "Employees by Manager",
+            "Employees by Managers (ALL)",
+            "Employees by Department",
+            "Departments Budget",
+            "Exit"
+        ]
+    },
+    {
+        type: "list",
+        name: "managername",
+        message: chalk.magenta("Please select Manager from List:"),
+        when(answer) {
+            return answer.actionperform === "Employees by Manager";
+        },
+        choices: dataset.managersArray
+    }
+]
+
+const deletedata = [
+    {
+        type: 'list',
+        pageSize: 12,
+        name: 'actionperform',
+        message: chalk.blue(`From where you want to delete data?`),
+        choices: [
+            "Delete Departments",
+            "Delete Roles",
+            "Delete Employees",
+            "Exit"
+        ]
+    }
+]
+
+const operations = [
+    {
+        type: 'list',
+        pageSize: 12,
+        name: 'actionperform',
+        message: chalk.blue(`Good ${ampm} what would you like to do today?`),
+        choices: actionlist,
+        default: "View All Employees"
+    }
+]
+
 const updateEmployee = [
     {
         type: 'list',
         name: 'updateemployee',
-        message: chalk.blue(`Select the Employee you like to update?`),
+        message: chalk.cyanBright(`Select the Employee you like to update?`),
         choices: dataset.employeeArray
     }
 ]
@@ -42,18 +94,8 @@ const updateRole = [
     {
         type: 'list',
         name: 'updaterole',
-        message: chalk.blue(`Select the new Role for the selected Employee?`),
+        message: chalk.cyanBright(`Select the new Role for the selected Employee?`),
         choices: dataset.rolesArray
-    }
-]
-
-const action = [
-    {
-        type: 'list',
-        name: 'actionperform',
-        message: chalk.blue(`Good ${ampm} what would you like to do today?`),
-        choices: actionlist,
-        default: "View All Employees"
     }
 ]
 
@@ -190,4 +232,4 @@ function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { action, department, roles, employee, updateEmployee, updateRole }
+module.exports = { operations, department, roles, employee, updateEmployee, updateRole, viewdata, deletedata }

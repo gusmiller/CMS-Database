@@ -12,13 +12,20 @@ const chalk = require("chalk");
 const departmentsArray = [];
 const rolesArray = [];
 const employeeArray = [];
+const managersArray = [];
 
+/**
+ * This functio will load inforation from a given table. It is meant to be reused
+ * in some of the options that require a simple query from a single table.
+ * @param {string} value - SQL Statement in some cases
+ * @returns 
+ */
 async function getTable(value) {
     const connection = await db();
 
     try {
 
-        if (value.indexOf("SELECT") >= 0) {
+        if (value.indexOf("SELECT") >= 0 || value.indexOf("select") >= 0) {
             const [rows, fields] = await connection.execute(value);
             return { count: rows.length, rows };
         } else {
@@ -34,46 +41,12 @@ async function getTable(value) {
     }
 }
 
-async function loadDepartments() {
-    const connection = await db();
-
-    const [rows, fields] = await connection.execute("SELECT name FROM department");
-    for (const row of rows) {
-        departmentsArray.push(row.name);
-    }
-
-}
-
-async function loadRoles(value) {
-    const connection = await db();
-
-    if (value === undefined) {
-        const [rows, fields] = await connection.execute("SELECT title FROM role");
-        for (const row of rows) {
-            rolesArray.push(row.title);
-        }
-    } else {
-        const splitName = value.updateemployee.split(' ');
-        const [rows, fields] = await connection.execute(`SELECT title FROM role WHERE id<>(SELECT role_id FROM employee ` +
-            `WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}");`);
-        for (const row of rows) {
-            rolesArray.push(row.title);
-        }
-    }
-
-}
-
-async function loadEmployees() {
-    const connection = await db();
-
-    employeeArray.push("No Manager")
-    const [rows, fields] = await connection.execute(`SELECT CONCAT_WS( " ", first_name, last_name ) as Fullname FROM employee;`);
-    for (const row of rows) {
-        employeeArray.push(row.Fullname);
-    }
-
-}
-
+/**
+ * This function will retrieve information from the department - filtering the table to match
+ * conditiona passed in parameter
+ * @param {string} name - department name
+ * @returns 
+ */
 async function addDepartment(name) {
     const connection = await db();
 
@@ -94,6 +67,21 @@ async function addDepartment(name) {
     }
 }
 
+async function getId(value, ocnn) {
+    const splitName = value.split(' ');
+
+    // Retrieve managers ID
+    const ManagerSql = `SELECT id FROM employee WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}"`;
+    [rows, fields] = await ocnn.execute(ManagerSql);
+    return rows[0].id;
+}
+
+/**
+ * This method will retrieve information from the Employee table. It also load a number of codes 
+ * such as Managers ID and roles ID. It validate the user does not exists already
+ * @param {object} value - inquirer object with selections
+ * @returns 
+ */
 async function addEmployee(value) {
     const connection = await db();
 
@@ -106,16 +94,19 @@ async function addEmployee(value) {
         } else {
 
             if (value.manager !== undefined && value.manager !== "No Manager") {
-                const splitName = value.manager.split(' ');
+                // const splitName = value.manager.split(' ');
 
-                const ManagerSql = `SELECT id FROM employee WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}"`;
-                [rows, fields] = await connection.execute(ManagerSql);
-                const ManagerId = rows[0].id;
+                // // Retrieve managers ID
+                // const ManagerSql = `SELECT id FROM employee WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}"`;
+                // [rows, fields] = await connection.execute(ManagerSql);
+                const ManagerId = await getId(value);
 
+                // Retrieves Role ID
                 const roleSql = `SELECT id FROM role WHERE title="${value.rolename}"`;
                 [rows, fields] = await connection.execute(roleSql);
                 const RoleId = rows[0].id;
 
+                // Builds INSERT SQL statement to run
                 sSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ` +
                     `("${value.firstname}", "${value.lastname}", ${RoleId}, ${ManagerId});`
             } else {
@@ -123,7 +114,7 @@ async function addEmployee(value) {
                     `("${value.firstname}", "${value.lastname}", ());`
             }
 
-            await connection.execute(sSql);
+            await connection.execute(sSql); // Executes the SQL Command - it does not return any value
             return chalk.bgGreen(`Employee ${value.firstname} ${value.lastname} has been added!\n`);
         }
     } catch (error) {
@@ -134,6 +125,11 @@ async function addEmployee(value) {
     }
 }
 
+/**
+ * This method will retrieve information from the Roles table. It validate the user does not exists already
+ * @param {object} value - inquirer object with selections
+ * @returns 
+ */
 async function addRole(value) {
     const connection = await db();
 
@@ -149,7 +145,7 @@ async function addRole(value) {
             sSql = `INSERT INTO role (title, salary, department_id) VALUES` +
                 `("${value.rolename}",${value.salary},(SELECT id FROM department WHERE name="${value.department}"));`
 
-            await connection.execute(sSql);
+            await connection.execute(sSql); // Executes the SQL Command - it does not return any value
             return chalk.green(`The role ${value.rolename} has been added to ${value.department}!\n`);
         }
     } catch (error) {
@@ -160,15 +156,22 @@ async function addRole(value) {
     }
 }
 
-async function updateEmployee(value) {
+/**
+ * This method will update employees role information already assigned to user. The roles array have already been
+ * filtered to exclude the role assigne currently to the user
+ * @param {object} value - inquirer object with selections
+ * @returns 
+ */
+async function updateEmployee(emp, role) {
     const connection = await db();
 
     try {
-        sSql = `INSERT INTO role (title, salary, department_id) VALUES` +
-            `("${value.rolename}",${value.salary},(SELECT id FROM department WHERE name="${value.department}"));`
+        const ManagerId = await getId(emp.updateemployee, connection);
+
+        sSql = `UPDATE employee SET role_id=(SELECT id FROM role WHERE title="${role.updaterole}") WHERE id=${ManagerId};`
 
         await connection.execute(sSql);
-        return chalk.green(`The role ${value.rolename} has been added to ${value.department}!\n`);
+        return chalk.bgCyanBright(`The user role has been added udated!\n`);
 
     } catch (error) {
         console.error(chalk.red('Error retrieving data:', error));
@@ -178,4 +181,72 @@ async function updateEmployee(value) {
     }
 }
 
-module.exports = { getTable, addDepartment, addRole, departmentsArray, loadDepartments, rolesArray, loadRoles, addEmployee, employeeArray, loadEmployees, updateEmployee };
+/**
+ * This asynchronous function will retrieve all records from department and add them into
+ * the array which used in the questionnaire (inquire)
+ */
+async function loadDepartments() {
+    const connection = await db();
+
+    const [rows, fields] = await connection.execute("SELECT name FROM department");
+    for (const row of rows) {
+        departmentsArray.push(row.name);
+    }
+}
+
+async function loadArray(sql, arrname) {
+    const connection = await db();
+    const [rows, fields] = await connection.execute(sql);
+    for (const row of rows) {
+
+        switch (arrname) {
+            case "managers": managersArray.push(row.Manager);
+            case "departments": departmentsArray.push(row.name);
+            case "roles": rolesArray.push(row.title);
+            case "employees":
+                employeeArray.push("No Manager");
+                employeeArray.push(row.Fullname);
+        }
+    }
+}
+
+/**
+ * This asynchronous function will retrieve all records from roles table and add them into
+ * the array which used in the questionnaire (inquire). The function receives a paramete but 
+ * it may not ba available. In case there isn't any parameter a simple query form the roles is 
+ * created.
+ */
+async function loadRoles(value) {
+    const connection = await db();
+
+    if (value === undefined) {
+        const [rows, fields] = await connection.execute("SELECT title FROM role");
+        for (const row of rows) {
+            rolesArray.push(row.title);
+        }
+    } else {
+        const splitName = value.updateemployee.split(' ');
+        const [rows, fields] = await connection.execute(`SELECT title FROM role WHERE id<>(SELECT role_id FROM employee ` +
+            `WHERE first_name="${splitName[0]}" AND last_name="${splitName[1]}");`);
+        for (const row of rows) {
+            rolesArray.push(row.title);
+        }
+    }
+}
+
+/**
+ * This asynchronous function will retrieve all records from employees table  and add them into
+ * the array which used in the questionnaire (inquire). Notice tha we concatenating the 
+ * first + last name
+ */
+async function loadEmployees() {
+    const connection = await db();
+
+    employeeArray.push("No Manager")
+    const [rows, fields] = await connection.execute(`SELECT CONCAT_WS( " ", first_name, last_name ) as Fullname FROM employee;`);
+    for (const row of rows) {
+        employeeArray.push(row.Fullname);
+    }
+}
+
+module.exports = { getTable, addDepartment, addRole, loadDepartments, loadRoles, addEmployee, loadEmployees, updateEmployee, loadArray, departmentsArray, managersArray, rolesArray, employeeArray };
