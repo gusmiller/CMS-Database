@@ -33,7 +33,7 @@ const updateEmployee = [
     {
         type: 'list',
         name: 'updateemployee',
-        message: chalk.blue(`Select the Employee you like to update?`),
+        message: chalk.cyanBright(`Select the Employee you like to update?`),
         choices: dataset.employeeArray
     }
 ]
@@ -42,7 +42,7 @@ const updateRole = [
     {
         type: 'list',
         name: 'updaterole',
-        message: chalk.blue(`Select the new Role for the selected Employee?`),
+        message: chalk.cyanBright(`Select the new Role for the selected Employee?`),
         choices: dataset.rolesArray
     }
 ]
