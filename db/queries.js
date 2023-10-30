@@ -34,22 +34,26 @@ const sql = {
     replacerole: `update employee set role_id=(select id from role where title="TBA") where role_id=(select id from role where title="param1");`,
     validatedepartment: `select * from department join role ON role.department_id=department.id and department.name<>"Human Resources"`,
     deletedepartment: `delete from department`,
+    deleteemployee: `delete from employee`,
+    getemployeeid: 'SELECT id, first_name, last_name from employee where ',
+    getemployeemanager: `select * from employee where manager_id=`,
+    updateemployeemanager: `update employee set manager_id=null where manager_id=`
 }
 
 const messages = {
     mysqlLapps: chalk.bgRed("Carleton Universty Coding Bootcamp"),
     departmentused: chalk.bgRed("Department has already been assigned to roles! Roles will be re-assigned to TBA department."),
     roleused: chalk.bgRed("Role is already been assigned to Employees! In case you delete Role, Empoyees would be assigned TBA Role"),
-    employeebymanagers: "List of ALL Employees order by management",
-    employeesmanager: `List of Employees under management of `,
-    employeesbydepartment: "List of Employees by Department",
-    dDepartmentsbudget: "Departments budget",
+    employeebymanagers: chalk.bgWhite("List of ALL Employees order by management"),
+    employeesbydepartment: chalk.bgWhite("List of Employees by Department"),
+    departmentsbudget: chalk.bgWhite("Departments budget"),
     viewallemployees: chalk.bgWhite("Information from Employees Table"),
     viewallemployeesnodata: chalk.bgRed("There was no data in Employees Table"),
     viewalldepartments: chalk.bgWhite("Information from Departments Table"),
     viewalldepartmentsnodata: chalk.bgRed("There was no data in Departments Table"),
     viewallroles: chalk.bgWhite("Information from Roles Table"),
     viewallrolesnodata: chalk.bgRed("There was no data in Roles Table"),
+    employeedeleted: chalk.bgRed("Employee has been deleted!"),
 
 }
 module.exports = { sql, messages };

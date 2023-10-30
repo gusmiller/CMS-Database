@@ -37,18 +37,18 @@ function headerslog(value) {
     }
 
     // Validate for chalk colors
-    if (value.lastIndexOf("39m") || value.lastIndexOf("49m")){
+    if (value.lastIndexOf("39m") || value.lastIndexOf("49m")) {
         let firstthree = value.substring(0, 5); // Retrieve the first 3 characters
         let lastfive = value.substring(value.length - 5); // Get the last portion
 
-        let newvalue =  value.substring(5); // Remove chalk characters
+        let newvalue = value.substring(5); // Remove chalk characters
         newvalue = newvalue.slice(0, -5);
         const padding = " ".repeat(140 - newvalue.length); // Build the fixed length string
         console.log(firstthree + newvalue + padding + lastfive); // Put message all back togeher 
-    }else{
-        console.log(value);    
+    } else {
+        console.log(value);
     }
-   
+
     console.log("");
     return;
 }
@@ -79,10 +79,8 @@ async function init() {
                 await dataset.loadArray(questions, dic.sql.employeelist, "employeesall", "Go back");
 
                 responseinquirer = await inquirer.prompt(questions.deletedata);
-                console.log(responseinquirer);
                 let deletedId = 0;
-                process.stdout.write("\x1Bc");
-                
+
                 switch (responseinquirer.actionperform) {
                     case "Delete Departments":
                         deleteId = responseinquirer.deletedKey;
@@ -134,7 +132,23 @@ async function init() {
                         break;
 
                     case "Delete Employees":
+                        const splitName = responseinquirer.deletedKey.split(' ');
+                        sSql = dic.sql.getemployeeid + `first_name="${splitName[0]}" and last_name="${splitName[1]}";`;
+                        response = await dataset.getTable(sSql);
+                        const employeeId = response.rows[0].id;
+
+                        sSql = dic.sql.getemployeemanager + `${employeeId};`;
+                        response = await dataset.getTable(sSql);
+
+                        if (response.count > 0) {
+                            ssql = dic.sql.deleteemployee + `$`
+                            await dataset.executeSQL();
+                        } 
+
+                        await dataset.executeSQL(`delete from employee where id=${employeeId};`);
+                        headerslog(dic.messages.employeebymanagers);
                         break;
+
                     case "Exit":
                         break;
                 }
@@ -163,7 +177,7 @@ async function init() {
                         if (responseinquirer.managername != "Go Back") {
                             sSql = dic.sql.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
                             response = await dataset.getTable(sSql);
-                            headerslog(dic.messages.employeesmanager + ` ${responseinquirer.managername}`)
+                            headerslog(chalk.bgWhite(`List of Employees under management of ${responseinquirer.managername}`))
 
                             // Format Employees by Manager header
                             console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
@@ -193,7 +207,7 @@ async function init() {
                     case "Departments Budget":
                         sSql = dic.sql.departmentbudget + ` order by id`;
                         response = await dataset.getTable(sSql);
-                        headerslog(dic.messages.dDepartmentsbudget)
+                        headerslog(dic.messages.departmentsbudget)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Budget", 25)}`));
@@ -258,14 +272,12 @@ async function init() {
                 break;
 
             case "Add a Department":
-                process.stdout.write("\x1Bc");
                 const departmentresponse = await inquirer.prompt(questions.department);
                 response = await dataset.addDepartment(departmentresponse.department);
                 console.log(response);
                 break;
 
             case "Add a Role":
-                process.stdout.write("\x1Bc");
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
                 const rolesresponse = await inquirer.prompt(questions.roles);
                 await dataset.loadArray(questions, dic.sql.roles, "roles");
@@ -273,7 +285,6 @@ async function init() {
                 break;
 
             case "Add an Employee":
-                process.stdout.write("\x1Bc");
                 await dataset.loadArray(questions, dic.sql.roles, "roles");
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
 
@@ -283,7 +294,6 @@ async function init() {
                 break;
 
             case "Update an Employee Role":
-                process.stdout.write("\x1Bc");
                 await dataset.loadArray(questions, dic.sql.allemployees, "employees");
                 const usereesponse = await inquirer.prompt(questions.updateEmployee);
 
@@ -294,7 +304,6 @@ async function init() {
                 break;
 
             case "Finish":
-                process.stdout.write("\x1Bc");
                 console.log("Thank you for participating!")
                 exit = true;
                 break;
