@@ -35,8 +35,21 @@ function headerslog(value) {
         console.log("");
         return;
     }
+
+    // Validate for chalk colors
+    if (value.lastIndexOf("39m") || value.lastIndexOf("49m")){
+        let firstthree = value.substring(0, 5); // Retrieve the first 3 characters
+        let lastfive = value.substring(value.length - 5); // Get the last portion
+
+        let newvalue =  value.substring(5); // Remove chalk characters
+        newvalue = newvalue.slice(0, -5);
+        const padding = " ".repeat(140 - newvalue.length); // Build the fixed length string
+        console.log(firstthree + newvalue + padding + lastfive); // Put message all back togeher 
+    }else{
+        console.log(value);    
+    }
+   
     console.log("");
-    console.log(value);
     return;
 }
 
@@ -49,7 +62,7 @@ async function init() {
     let exit = false;
     let response;
     let responseinquirer;
-    let sSql = dic.managers;
+    let sSql = dic.sql.managers;
 
     process.stdout.write("\x1Bc");
     // for (var x=1; x<30; x++){
@@ -61,22 +74,65 @@ async function init() {
 
         switch (answer.actionperform) {
             case "\u001b[31mDelete Data\u001b[39m":
-                await dataset.loadArray(questions, dic.departments, "departments", "Go back");
-                await dataset.loadArray(questions, dic.roles, "rolesarray", "Go back");
-                await dataset.loadArray(questions, dic.employees, "employeesall", "Go back");
+                await dataset.loadArray(questions, dic.sql.departments, "departments", "Go back");
+                await dataset.loadArray(questions, dic.sql.roles, "rolesarray", "Go back");
+                await dataset.loadArray(questions, dic.sql.employeelist, "employeesall", "Go back");
 
                 responseinquirer = await inquirer.prompt(questions.deletedata);
                 console.log(responseinquirer);
-
+                let deletedId = 0;
+                process.stdout.write("\x1Bc");
+                
                 switch (responseinquirer.actionperform) {
-                    case "Delete Departments":                        
-                        sSql = dic.empbymanager 
+                    case "Delete Departments":
+                        deleteId = responseinquirer.deletedKey;
+                        sSql = dic.sql.validatedepartment + ` where name="${responseinquirer.deletedKey}"`;
                         response = await dataset.getTable(sSql);
+
+                        if (response.count > 0) {
+                            headerslog(dic.messages.departmentused); // Display message
+                            responseinquirer = await inquirer.prompt(questions.yesnoConfirm);
+
+                            // Validate the role is not already assigned. In case it is assigned then we will re-assign the 
+                            // users to TBA role.
+                            if (responseinquirer.confirmdelete) {
+                                // SQL Statement to replace role already used. This is required or else the referential 
+                                // integrity will fail. We cannot delete the key
+                                let deleteSQL = dic.sql.replacerole.replace("param1", deleteId);
+                                await dataset.executeSQL(deleteSQL);
+                                await dataset.executeSQL(dic.sql.deleterole + `"${deleteId}"`)
+                            }
+
+                        } else {
+                            response = await dataset.executeSQL(dic.sql.deletedepartment + ` where name="${deleteId}";`);
+                        }
+
                         break;
+
                     case "Delete Roles":
-                        sSql = dic.empbymanager
+                        deleteId = responseinquirer.deletedKey;
+                        sSql = dic.sql.validaterole + `"${responseinquirer.deletedKey}"`;
                         response = await dataset.getTable(sSql);
+
+                        if (response.count > 0) {
+                            headerslog(dic.messages.roleused);
+                            responseinquirer = await inquirer.prompt(questions.yesnoConfirm);
+
+                            // Validate the role is not already assigned. In case it is assigned then we will re-assign the 
+                            // users to TBA role.
+                            if (responseinquirer.confirmdelete) {
+                                // SQL Statement to replace role already used. This is required or else the referential 
+                                // integrity will fail. We cannot delete the key
+                                let deleteSQL = dic.sql.replacerole.replace("param1", deleteId);
+                                await dataset.executeSQL(deleteSQL);
+                                await dataset.executeSQL(dic.sql.deleterole + `"${deleteId}"`)
+                            }
+
+                        } else {
+                            response = await dataset.executeSQL(dic.sql.validaterole + `${deleteId};`);
+                        }
                         break;
+
                     case "Delete Employees":
                         break;
                     case "Exit":
@@ -85,14 +141,14 @@ async function init() {
                 break;
 
             case "\u001b[32mView Data\u001b[39m":
-                await dataset.loadArray(questions, dic.managers, "managers", "Go Back");
+                await dataset.loadArray(questions, dic.sql.managers, "managers", "Go Back");
                 responseinquirer = await inquirer.prompt(questions.viewdata);
 
                 switch (responseinquirer.actionperform) {
                     case "Employees by Managers (ALL)":
-                        sSql = dic.empbymanager + ` order by Manager, id`
+                        sSql = dic.sql.empbymanager + ` order by Manager, id`
                         response = await dataset.getTable(sSql);
-                        headerslog(`List of ALL Employees order by management`)
+                        headerslog(dic.messages.employeebymanagers)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("Manager", 25)} ${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
@@ -105,9 +161,9 @@ async function init() {
 
                     case "Employees by Manager":
                         if (responseinquirer.managername != "Go Back") {
-                            sSql = dic.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
+                            sSql = dic.sql.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
                             response = await dataset.getTable(sSql);
-                            headerslog(`List of Employees under management of ${responseinquirer.managername}`)
+                            headerslog(dic.messages.employeesmanager + ` ${responseinquirer.managername}`)
 
                             // Format Employees by Manager header
                             console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
@@ -120,9 +176,9 @@ async function init() {
                         break;
 
                     case "Employees by Department":
-                        sSql = dic.empbydepartment;
+                        sSql = dic.sql.empbydepartment;
                         response = await dataset.getTable(sSql);
-                        headerslog(`List of Employees by Department`)
+                        headerslog(dic.messages.employeesbydepartment)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Fullname", 25)} ${format.resize("Title", 40)} ${format.resize("Salary", 25)}`));
@@ -135,9 +191,9 @@ async function init() {
                         break;
 
                     case "Departments Budget":
-                        sSql = dic.departmentbudget + ` order by id`;
+                        sSql = dic.sql.departmentbudget + ` order by id`;
                         response = await dataset.getTable(sSql);
-                        headerslog(`Departments budget`)
+                        headerslog(dic.messages.dDepartmentsbudget)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Budget", 25)}`));
@@ -152,18 +208,18 @@ async function init() {
                 break;
 
             case "View All Employees":
-                const dsEmployee = await dataset.getTable(dic.employees);
+                const dsEmployee = await dataset.getTable(dic.sql.employees);
 
                 if (dsEmployee.count == 0) {
-                    format.nodata("No Records found in the Employee's table");
+                    format.nodata(dic.messages.viewallemployeesnodata);
                 } else {
-                    headerslog("Information from Employees Table");
+                    headerslog(dic.messages.viewallemployees);
 
                     // Format table header
-                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role Title", 30)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 12)} ${format.resize("Manager", 25)}`));
+                    console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role Title", 30)} ${format.resize("Department Name", 30)} ${format.resize("Manager", 25)} ${format.resize("Salary", 12)}`));
 
                     for (const row of dsEmployee.rows) {
-                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.title, 30)} ${format.resize(row.name, 30)} ${format.money(row.salary)}   ${format.resize(row.Manager, 25)}`);
+                        console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.title, 30)} ${format.resize(row.name, 30)} ${format.resize(row.Manager, 25)} ${format.money(row.salary)}`);
                     }
                     console.log("");
                 }
@@ -172,10 +228,9 @@ async function init() {
             case "View All Departments":
                 const dsDepartment = await dataset.getTable("department");
                 if (dsDepartment.count == 0) {
-                    format.nodata("No Records found in the Department's table");
+                    format.nodata(dic.messages.viewalldepartmentsnodata);
                 } else {
-                    console.log("Information from Department Table");
-                    console.log("");
+                    headerslog(dic.messages.viewalldepartments);
 
                     // Format table header - yello background
                     console.log(chalk.yellow(`${format.resize("ID", 5)} ${format.resize("Department Name", 50)}`));
@@ -187,12 +242,11 @@ async function init() {
                 break;
 
             case "View All Roles":
-                const dsRoles = await dataset.getTable(dic.allroles);
+                const dsRoles = await dataset.getTable(dic.sql.allroles);
                 if (dsRoles.count == 0) {
-                    format.nodata("No Records found in the Roles table");
+                    format.nodata(dic.messages.viewallrolesnodata);
                 } else {
-                    console.log("Information from Roles Table");
-                    console.log("")
+                    headerslog(dic.messages.viewallroles);
 
                     // Format table header - blue background
                     console.log(chalk.blueBright(`${format.resize("Role Tile", 40)} ${format.resize("ID", 5)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 15)}`));
@@ -204,21 +258,24 @@ async function init() {
                 break;
 
             case "Add a Department":
+                process.stdout.write("\x1Bc");
                 const departmentresponse = await inquirer.prompt(questions.department);
                 response = await dataset.addDepartment(departmentresponse.department);
                 console.log(response);
                 break;
 
             case "Add a Role":
-                await dataset.loadArray(questions, dic.departments, "departments");
+                process.stdout.write("\x1Bc");
+                await dataset.loadArray(questions, dic.sql.departments, "departments");
                 const rolesresponse = await inquirer.prompt(questions.roles);
-                await dataset.loadArray(questions, dic.roles, "roles");
+                await dataset.loadArray(questions, dic.sql.roles, "roles");
                 console.log(response);
                 break;
 
             case "Add an Employee":
-                await dataset.loadArray(questions, dic.roles, "roles");
-                await dataset.loadArray(questions, dic.departments, "departments");
+                process.stdout.write("\x1Bc");
+                await dataset.loadArray(questions, dic.sql.roles, "roles");
+                await dataset.loadArray(questions, dic.sql.departments, "departments");
 
                 const employeeresponse = await inquirer.prompt(questions.employee);
                 response = await dataset.addEmployee(employeeresponse);
@@ -226,7 +283,8 @@ async function init() {
                 break;
 
             case "Update an Employee Role":
-                await dataset.loadArray(questions, dic.allemployees, "employees");
+                process.stdout.write("\x1Bc");
+                await dataset.loadArray(questions, dic.sql.allemployees, "employees");
                 const usereesponse = await inquirer.prompt(questions.updateEmployee);
 
                 resultArr = await dataset.loadRoles(questions, usereesponse);

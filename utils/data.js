@@ -61,6 +61,18 @@ async function addDepartment(name) {
     }
 }
 
+async function executeSQL(value) {
+    const connection = await db();
+    try {
+        await connection.execute(value);
+        return chalk.green(`Process completed!`);
+    } catch {
+        console.error(chalk.red('Error retrieving data:', error));        
+    } finally {
+        connection.end(); // Close the database connection when done
+    }
+}
+
 /**
  * This method will split the employee name passed and retrieve the user in the employee
  * table to return the employee id
@@ -194,6 +206,7 @@ async function updateEmployee(emp, role) {
 async function loadArray(questions, sql, arrname, additional) {
     const connection = await db();
     const [rows, fields] = await connection.execute(sql);
+    // const departments = await connection.query(departmentQuery);
 
     for (const row of rows) {
 
@@ -205,13 +218,12 @@ async function loadArray(questions, sql, arrname, additional) {
                 questions.departmentsArray.push(row.name);
                 break;
             case "rolesarray":
-                questions.rolesArray.push(row.title);
+                questions.rolesArray.push(row.name);
                 break;
             case "employeesall":
-                questions.employeeArray.push(row.Fullname);
+                questions.employeeArray.push(row.name);
                 break;
-            case "employees":
-                questions.employeeArray.push("No Manager");
+            case "employees":                
                 questions.employeeArray.push(row.Fullname);
                 break;
         }
@@ -264,4 +276,4 @@ async function loadRoles(questions, value) {
     }
 }
 
-module.exports = { getTable, addDepartment, addRole, loadRoles, addEmployee, updateEmployee, loadArray };
+module.exports = { getTable, addDepartment, addRole, loadRoles, addEmployee, updateEmployee, loadArray, executeSQL };

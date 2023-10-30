@@ -11,6 +11,8 @@
  *******************************************************************/
 const chalk = require('chalk');
 
+let deleteConfirm = "Are you sure you want to proceed?";
+
 const actionlist = [
 
     "View All Employees",
@@ -74,7 +76,7 @@ const deletedata = [
     },
     {
         type: "list",
-        name: "deleterol",
+        name: "deletedKey",
         pageSize: 20,
         message: chalk.magenta("Please select Role to delete! NOTE! You can ONLY delete Roles not assigned to employees:"),
         when(answer) {
@@ -84,9 +86,9 @@ const deletedata = [
     },
     {
         type: "list",
-        name: "deletedepartment",
+        name: "deletedKey",
         pageSize: 12,
-        message: chalk.magenta("Please select Department to delete NOTE! You can ONLY delete Departments not assigned to employees:"),
+        message: chalk.magenta("Please select Department to delete:"),
         when(answer) {
             return answer.actionperform === "Delete Departments";
         },
@@ -94,7 +96,7 @@ const deletedata = [
     },
     {
         type: "list",
-        name: "deleteemployee",
+        name: "deletedKey",
         pageSize: 20,
         message: chalk.magenta("Please select Employee:"),
         when(answer) {
@@ -119,6 +121,7 @@ const updateEmployee = [
     {
         type: 'list',
         name: 'updateemployee',
+        pageSize: 15,
         message: chalk.cyanBright(`Select the Employee you like to update?`),
         choices: employeeArray
     }
@@ -128,6 +131,7 @@ const updateRole = [
     {
         type: 'list',
         name: 'updaterole',
+        pageSize: 25,
         message: chalk.cyanBright(`Select the new Role for the selected Employee?`),
         choices: rolesArray
     }
@@ -262,8 +266,16 @@ const employee = [
     }
 ]
 
+const yesnoConfirm = [
+    {
+        type: "confirm",
+        name: "confirmdelete",
+        message: chalk.red(deleteConfirm),
+    }
+]
+
 function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray }
+module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray, yesnoConfirm, deleteConfirm }
