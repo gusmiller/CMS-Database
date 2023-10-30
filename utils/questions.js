@@ -10,7 +10,6 @@
  * application will loop through 
  *******************************************************************/
 const chalk = require('chalk');
-const dataset = require("./data");
 
 const actionlist = [
 
@@ -56,7 +55,7 @@ const viewdata = [
         when(answer) {
             return answer.actionperform === "Employees by Manager";
         },
-        choices: dataset.managersArray
+        choices: managersArray
     }
 ]
 
@@ -76,21 +75,22 @@ const deletedata = [
     {
         type: "list",
         name: "deleterol",
-        message: chalk.magenta("Please select Role to delete:"),
+        pageSize: 20,
+        message: chalk.magenta("Please select Role to delete! NOTE! You can ONLY delete Roles not assigned to employees:"),
         when(answer) {
             return answer.actionperform === "Delete Roles";
         },
-        choices: dataset.rolesArray
+        choices: rolesArray
     },
     {
         type: "list",
         name: "deletedepartment",
         pageSize: 12,
-        message: chalk.magenta("Please select Department to delete:"),
+        message: chalk.magenta("Please select Department to delete NOTE! You can ONLY delete Departments not assigned to employees:"),
         when(answer) {
             return answer.actionperform === "Delete Departments";
         },
-        choices: dataset.departmentsArray
+        choices: departmentsArray
     },
     {
         type: "list",
@@ -100,7 +100,7 @@ const deletedata = [
         when(answer) {
             return answer.actionperform === "Delete Employees";
         },
-        choices: dataset.employeeArray
+        choices: employeeArray
     }
 ]
 
@@ -120,7 +120,7 @@ const updateEmployee = [
         type: 'list',
         name: 'updateemployee',
         message: chalk.cyanBright(`Select the Employee you like to update?`),
-        choices: dataset.employeeArray
+        choices: employeeArray
     }
 ]
 
@@ -129,7 +129,7 @@ const updateRole = [
         type: 'list',
         name: 'updaterole',
         message: chalk.cyanBright(`Select the new Role for the selected Employee?`),
-        choices: dataset.rolesArray
+        choices: rolesArray
     }
 ]
 
@@ -151,7 +151,7 @@ const department = [
     }
 ]
 
-const roles = [
+const roleactions = [
     {
         type: "input",
         name: "rolename",
@@ -185,7 +185,7 @@ const roles = [
         type: "list",
         name: "department",
         message: chalk.magenta("Please enter Name of Department:"),
-        choices: dataset.departmentsArray,
+        choices: departmentsArray,
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid Department Name! Press Ctrl-C to cancel');
@@ -232,7 +232,7 @@ const employee = [
         type: "list",
         name: "rolename",
         message: chalk.greenBright("Please enter what would be their Role:"),
-        choices: dataset.rolesArray,
+        choices: rolesArray,
         when(answer) {
             return answer.firstname.length != 0 && answer.lastname.length != 0;
         },
@@ -248,9 +248,9 @@ const employee = [
         type: "list",
         name: "manager",
         message: chalk.greenBright("Who will be their manager?:"),
-        choices: dataset.employeeArray,
+        choices: employeeArray,
         when(answer) {
-            return dataset.employeeArray.length != 0;
+            return employeeArray.length != 0;
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -266,4 +266,4 @@ function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { operations, department, roles, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray }
+module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray }

@@ -25,8 +25,7 @@ const fs = require("fs");
 // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
 const sSchema = fs.readFileSync("./db/schema.sql", "utf8");
 
-const questions = require("./utils/questions");
-const connectDb = require("./utils/connect");
+let questions = require("./utils/questions");
 const dataset = require("./utils/data");
 const format = require("./helpers/formatter");
 const dic = require("./db/queries");
@@ -63,14 +62,20 @@ async function init() {
         switch (answer.actionperform) {
             case "\u001b[31mDelete Data\u001b[39m":
                 await dataset.loadArray(questions, dic.departments, "departments", "Go back");
-                await dataset.loadArray(questions, dic.roles, "roles", "Go back");
+                await dataset.loadArray(questions, dic.roles, "rolesarray", "Go back");
                 await dataset.loadArray(questions, dic.employees, "employeesall", "Go back");
 
                 responseinquirer = await inquirer.prompt(questions.deletedata);
+                console.log(responseinquirer);
+
                 switch (responseinquirer.actionperform) {
-                    case "Delete Departments":
+                    case "Delete Departments":                        
+                        sSql = dic.empbymanager 
+                        response = await dataset.getTable(sSql);
                         break;
                     case "Delete Roles":
+                        sSql = dic.empbymanager
+                        response = await dataset.getTable(sSql);
                         break;
                     case "Delete Employees":
                         break;

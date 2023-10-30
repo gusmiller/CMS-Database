@@ -5,7 +5,6 @@
  * Assignment #12 - SQL Content Management Systems (CMS)
  * Date : 10/26/2023 10:03:23 PM
  *******************************************************************/
-const mysql = require("mysql2");
 const db = require("./connect");
 const chalk = require("chalk");
 
@@ -199,23 +198,42 @@ async function loadArray(questions, sql, arrname, additional) {
     for (const row of rows) {
 
         switch (arrname) {
-            case "managers": questions.managersArray.push(row.Manager);
-            case "departments": questions.departmentsArray.push(row.name);
-            case "roles": questions.rolesArray.push(row.title);
-            case "employeesall": questions.employeeArray.push(row.Fullname);
+            case "managers":
+                questions.managersArray.push(row.Manager);
+                break;
+            case "departments":
+                questions.departmentsArray.push(row.name);
+                break;
+            case "rolesarray":
+                questions.rolesArray.push(row.title);
+                break;
+            case "employeesall":
+                questions.employeeArray.push(row.Fullname);
+                break;
             case "employees":
                 questions.employeeArray.push("No Manager");
                 questions.employeeArray.push(row.Fullname);
+                break;
         }
     }
 
     if (additional !== undefined) {
         switch (arrname) {
-            case "managers": questions.managersArray.push(additional);
-            case "departments": questions.departmentsArray.push(additional);
-            case "roles": questions.rolesArray.push(additional);
-            case "employeesall": questions.employeeArray.push(additional);
-            case "employees": questions.employeeArray.push(additional);
+            case "managers":
+                questions.managersArray.push(additional);
+                break;
+            case "departments":
+                questions.departmentsArray.push(additional);
+                break;
+            case "rolesarray":
+                questions.rolesArray.push(additional);
+                break;
+            case "employeesall":
+                questions.employeeArray.push(additional);
+                break;
+            case "employees":
+                questions.employeeArray.push(additional);
+                break;
         }
     }
 }
