@@ -27,6 +27,11 @@ const actionlist = [
     "Clear Terminal"
 ]
 
+let departmentsArray = [];
+let rolesArray = [];
+let employeeArray = [];
+let managersArray = [];
+
 let hours = new Date().getHours();
 hours = (hours + 24 - 2) % 24;
 const ampm = (hours >= 12) ? "afternoon," : "morning,";
@@ -67,6 +72,35 @@ const deletedata = [
             "Delete Employees",
             "Exit"
         ]
+    },
+    {
+        type: "list",
+        name: "deleterol",
+        message: chalk.magenta("Please select Role to delete:"),
+        when(answer) {
+            return answer.actionperform === "Delete Roles";
+        },
+        choices: dataset.rolesArray
+    },
+    {
+        type: "list",
+        name: "deletedepartment",
+        pageSize: 12,
+        message: chalk.magenta("Please select Department to delete:"),
+        when(answer) {
+            return answer.actionperform === "Delete Departments";
+        },
+        choices: dataset.departmentsArray
+    },
+    {
+        type: "list",
+        name: "deleteemployee",
+        pageSize: 20,
+        message: chalk.magenta("Please select Employee:"),
+        when(answer) {
+            return answer.actionperform === "Delete Employees";
+        },
+        choices: dataset.employeeArray
     }
 ]
 
@@ -232,4 +266,4 @@ function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { operations, department, roles, employee, updateEmployee, updateRole, viewdata, deletedata }
+module.exports = { operations, department, roles, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray }

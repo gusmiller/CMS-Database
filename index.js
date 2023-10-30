@@ -62,9 +62,25 @@ async function init() {
 
         switch (answer.actionperform) {
             case "\u001b[31mDelete Data\u001b[39m":
+                await dataset.loadArray(questions, dic.departments, "departments", "Go back");
+                await dataset.loadArray(questions, dic.roles, "roles", "Go back");
+                await dataset.loadArray(questions, dic.employees, "employeesall", "Go back");
+
+                responseinquirer = await inquirer.prompt(questions.deletedata);
+                switch (responseinquirer.actionperform) {
+                    case "Delete Departments":
+                        break;
+                    case "Delete Roles":
+                        break;
+                    case "Delete Employees":
+                        break;
+                    case "Exit":
+                        break;
+                }
                 break;
+
             case "\u001b[32mView Data\u001b[39m":
-                await dataset.loadArray(dic.managers, "managers");
+                await dataset.loadArray(questions, dic.managers, "managers", "Go Back");
                 responseinquirer = await inquirer.prompt(questions.viewdata);
 
                 switch (responseinquirer.actionperform) {
@@ -83,17 +99,19 @@ async function init() {
                         break;
 
                     case "Employees by Manager":
-                        sSql = dic.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
-                        response = await dataset.getTable(sSql);
-                        headerslog(`List of Employees under management of ${responseinquirer.managername}`)
+                        if (responseinquirer.managername != "Go Back") {
+                            sSql = dic.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
+                            response = await dataset.getTable(sSql);
+                            headerslog(`List of Employees under management of ${responseinquirer.managername}`)
 
-                        // Format Employees by Manager header
-                        console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
+                            // Format Employees by Manager header
+                            console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
 
-                        for (const row of response.rows) {
-                            console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.role_id, 5)} ${format.resize(row.title, 25)}`);
+                            for (const row of response.rows) {
+                                console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.role_id, 5)} ${format.resize(row.title, 25)}`);
+                            }
+                            headerslog();
                         }
-                        headerslog();
                         break;
 
                     case "Employees by Department":
@@ -187,19 +205,15 @@ async function init() {
                 break;
 
             case "Add a Role":
-                await dataset.loadArray(dic.departments, "departments");
-                //resultArr = await dataset.loadDepartments();
+                await dataset.loadArray(questions, dic.departments, "departments");
                 const rolesresponse = await inquirer.prompt(questions.roles);
-                await dataset.loadArray(dic.roles, "roles");
-                //response = await dataset.addRole(rolesresponse);
+                await dataset.loadArray(questions, dic.roles, "roles");
                 console.log(response);
                 break;
 
             case "Add an Employee":
-                await dataset.loadArray(dic.roles, "roles");
-                await dataset.loadArray(dic.departments, "departments");
-                // resultArr = await dataset.loadRoles();
-                // resultArr = await dataset.loadEmployees();
+                await dataset.loadArray(questions, dic.roles, "roles");
+                await dataset.loadArray(questions, dic.departments, "departments");
 
                 const employeeresponse = await inquirer.prompt(questions.employee);
                 response = await dataset.addEmployee(employeeresponse);
@@ -207,10 +221,10 @@ async function init() {
                 break;
 
             case "Update an Employee Role":
-                resultArr = await dataset.loadEmployees();
+                await dataset.loadArray(questions, dic.allemployees, "employees");
                 const usereesponse = await inquirer.prompt(questions.updateEmployee);
 
-                resultArr = await dataset.loadRoles(usereesponse);
+                resultArr = await dataset.loadRoles(questions, usereesponse);
                 const roleupdate = await inquirer.prompt(questions.updateRole);
                 response = await dataset.updateEmployee(usereesponse, roleupdate);
                 console.log(response);

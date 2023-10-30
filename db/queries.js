@@ -26,6 +26,7 @@ const sqldictionary = {
     empbymanager:`select concat_ws(" ", first_name, last_name) as Fullname, data.* from (select e.*, role.title, (select concat_ws(" ", first_name, last_name) from employee where id=e.manager_id) as Manager from employee e join role on e.role_id=role.id where not e.manager_id is null) as data`,
     empbydepartment:`select d.id as DepartmentID, d.name, e.id, concat_ws(" ", first_name, last_name) as Fullname, r.title, r.salary from employee as e join role as r on r.id=e.role_id join department as d on d.id=r.department_id order by d.id, e.id`,
     departmentbudget:`select d.id, d.name, SUM(r.salary) as budget from employee as e join role as r on r.id=e.role_id join department as d on d.id=r.department_id group by d.id, d.name`,
+    allemployees:`SELECT CONCAT_WS( " ", first_name, last_name ) as Fullname FROM employee;`
 }
 
 module.exports = sqldictionary;
