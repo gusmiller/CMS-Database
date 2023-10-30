@@ -12,6 +12,7 @@ const chalk = require("chalk");
 const departmentsArray = [];
 const rolesArray = [];
 const employeeArray = [];
+const managersArray = [];
 
 /**
  * This functio will load inforation from a given table. It is meant to be reused
@@ -24,7 +25,7 @@ async function getTable(value) {
 
     try {
 
-        if (value.indexOf("SELECT") >= 0) {
+        if (value.indexOf("SELECT") >= 0 || value.indexOf("select") >= 0) {
             const [rows, fields] = await connection.execute(value);
             return { count: rows.length, rows };
         } else {
@@ -66,7 +67,7 @@ async function addDepartment(name) {
     }
 }
 
-async function getId(value, ocnn){
+async function getId(value, ocnn) {
     const splitName = value.split(' ');
 
     // Retrieve managers ID
@@ -193,6 +194,22 @@ async function loadDepartments() {
     }
 }
 
+async function loadArray(sql, arrname) {
+    const connection = await db();
+    const [rows, fields] = await connection.execute(sql);
+    for (const row of rows) {
+
+        switch (arrname) {
+            case "managers": managersArray.push(row.Manager);
+            case "departments": departmentsArray.push(row.name);
+            case "roles": rolesArray.push(row.title);
+            case "employees":
+                employeeArray.push("No Manager");
+                employeeArray.push(row.Fullname);
+        }
+    }
+}
+
 /**
  * This asynchronous function will retrieve all records from roles table and add them into
  * the array which used in the questionnaire (inquire). The function receives a paramete but 
@@ -232,4 +249,4 @@ async function loadEmployees() {
     }
 }
 
-module.exports = { getTable, addDepartment, addRole, departmentsArray, loadDepartments, rolesArray, loadRoles, addEmployee, employeeArray, loadEmployees, updateEmployee };
+module.exports = { getTable, addDepartment, addRole, loadDepartments, loadRoles, addEmployee, loadEmployees, updateEmployee, loadArray, departmentsArray, managersArray, rolesArray, employeeArray };

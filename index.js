@@ -23,12 +23,23 @@ const fs = require("fs");
 // The fs.readFileSync() method is an inbuilt application programming interface of 
 // the fs module which is used to read the file and return its content. 
 // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
-const sSql = fs.readFileSync("./db/schema.sql", "utf8");
+const sSchema = fs.readFileSync("./db/schema.sql", "utf8");
 
 const questions = require("./utils/questions");
 const connectDb = require("./utils/connect");
 const dataset = require("./utils/data");
 const format = require("./helpers/formatter");
+const dic = require("./db/queries");
+
+function headerslog(value) {
+    if (value === undefined) {
+        console.log("");
+        return;
+    }
+    console.log("");
+    console.log(value);
+    return;
+}
 
 /**
  * Entry point for the application. Inquire questionnaire will continue until
@@ -38,29 +49,93 @@ const format = require("./helpers/formatter");
 async function init() {
     let exit = false;
     let response;
-    let resultArr;
+    let responseinquirer;
+    let sSql = dic.managers;
 
     process.stdout.write("\x1Bc");
+    // for (var x=1; x<30; x++){
+    //     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    // }
 
     while (!exit) {
-        const answer = await inquirer.prompt(questions.action);
+        const answer = await inquirer.prompt(questions.operations);
 
         switch (answer.actionperform) {
-            case "View All Employees":
+            case "\u001b[31mDelete Data\u001b[39m":
+                break;
+            case "\u001b[32mView Data\u001b[39m":
+                await dataset.loadArray(dic.managers, "managers");
+                responseinquirer = await inquirer.prompt(questions.viewdata);
 
-                // Complex Query - using CONCAT_WS to joing two string together.
-                // This function in MySQL helps in joining two or more strings along with a separator. The separator 
-                // must be specified by the user and it can also be a string. If the separator is NULL, then the 
-                // result will also be NULL. https://www.geeksforgeeks.org/concat_ws-function-in-mysql/
-                const sEmpSql = `SELECT E.id, CONCAT_WS( " ", E.first_name, E.last_name ) as Fullname, r.title, d.name, r.salary, CASE WHEN ISNULL(M.first_name) THEN "No Manager" ELSE CONCAT_WS( " ", M.first_name, M.last_name ) END AS Manager FROM employee E JOIN role R ON R.id=E.role_id JOIN department D ON D.id=R.department_id LEFT JOIN employee M ON M.id=E.manager_id`
-                const dsEmployee = await dataset.getTable(sEmpSql);
+                switch (responseinquirer.actionperform) {
+                    case "Employees by Managers (ALL)":
+                        sSql = dic.empbymanager + ` order by Manager, id`
+                        response = await dataset.getTable(sSql);
+                        headerslog(`List of ALL Employees order by management`)
+
+                        // Format Employees by Manager header
+                        console.log(chalk.bgCyan(`${format.resize("Manager", 25)} ${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
+
+                        for (const row of response.rows) {
+                            console.log(`${format.resize(row.Manager, 25)} ${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.role_id, 5)} ${format.resize(row.title, 25)}`);
+                        }
+                        headerslog();
+                        break;
+
+                    case "Employees by Manager":
+                        sSql = dic.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
+                        response = await dataset.getTable(sSql);
+                        headerslog(`List of Employees under management of ${responseinquirer.managername}`)
+
+                        // Format Employees by Manager header
+                        console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
+
+                        for (const row of response.rows) {
+                            console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.Fullname, 25)} ${format.resize(row.role_id, 5)} ${format.resize(row.title, 25)}`);
+                        }
+                        headerslog();
+                        break;
+
+                    case "Employees by Department":
+                        sSql = dic.empbydepartment;
+                        response = await dataset.getTable(sSql);
+                        headerslog(`List of Employees by Department`)
+
+                        // Format Employees by Manager header
+                        console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Fullname", 25)} ${format.resize("Title", 40)} ${format.resize("Salary", 25)}`));
+
+                        let departmentId = 0;
+                        for (const row of response.rows) {
+                            console.log(`${format.resize(row.DepartmentID.toString(), 5)} ${format.resize(row.name, 30)} ${format.resize(row.Fullname, 25)} ${format.resize(row.title, 40)} ${format.money(row.salary)}`);
+                        }
+                        headerslog();
+                        break;
+
+                    case "Departments Budget":
+                        sSql = dic.departmentbudget + ` order by id`;
+                        response = await dataset.getTable(sSql);
+                        headerslog(`Departments budget`)
+
+                        // Format Employees by Manager header
+                        console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Budget", 25)}`));
+                        for (const row of response.rows) {
+                            console.log(`${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 30)} ${format.money(row.budget)}`);
+                        }
+                        headerslog();
+                        break;
+
+                    case "Exit":
+                }
+                break;
+
+            case "View All Employees":
+                const dsEmployee = await dataset.getTable(dic.employees);
 
                 if (dsEmployee.count == 0) {
                     format.nodata("No Records found in the Employee's table");
                 } else {
-                    console.log("Information from Employees Table");
-                    console.log("");
-                    
+                    headerslog("Information from Employees Table");
+
                     // Format table header
                     console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role Title", 30)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 12)} ${format.resize("Manager", 25)}`));
 
@@ -89,8 +164,7 @@ async function init() {
                 break;
 
             case "View All Roles":
-                const sSql = `SELECT R.title, R.id, D.name, R.salary FROM role R JOIN department D ON D.id=R.department_id`
-                const dsRoles = await dataset.getTable(sSql);
+                const dsRoles = await dataset.getTable(dic.allroles);
                 if (dsRoles.count == 0) {
                     format.nodata("No Records found in the Roles table");
                 } else {
@@ -113,15 +187,19 @@ async function init() {
                 break;
 
             case "Add a Role":
-                resultArr = await dataset.loadDepartments();
+                await dataset.loadArray(dic.departments, "departments");
+                //resultArr = await dataset.loadDepartments();
                 const rolesresponse = await inquirer.prompt(questions.roles);
-                response = await dataset.addRole(rolesresponse);
+                await dataset.loadArray(dic.roles, "roles");
+                //response = await dataset.addRole(rolesresponse);
                 console.log(response);
                 break;
 
             case "Add an Employee":
-                resultArr = await dataset.loadRoles();
-                resultArr = await dataset.loadEmployees();
+                await dataset.loadArray(dic.roles, "roles");
+                await dataset.loadArray(dic.departments, "departments");
+                // resultArr = await dataset.loadRoles();
+                // resultArr = await dataset.loadEmployees();
 
                 const employeeresponse = await inquirer.prompt(questions.employee);
                 response = await dataset.addEmployee(employeeresponse);
@@ -146,6 +224,9 @@ async function init() {
 
             case "Clear Terminal":
                 process.stdout.write("\x1Bc");
+                break;
+
+            default:
                 break;
         }
     }
