@@ -78,7 +78,7 @@ const deletedata = [
         type: "list",
         name: "deletedKey",
         pageSize: 20,
-        message: chalk.magenta("Please select Role to delete! NOTE! You can ONLY delete Roles not assigned to employees:"),
+        message: chalk.magenta("Please select Role to delete!"),
         when(answer) {
             return answer.actionperform === "Delete Roles";
         },
@@ -98,8 +98,8 @@ const deletedata = [
         type: "list",
         name: "deletedKey",
         pageSize: 20,
-        message: chalk.magenta("Please select Employee:"),
-        when(answer) {
+        message: chalk.magenta("Please select Employee to delete:"),
+        when(answer) { 
             return answer.actionperform === "Delete Employees";
         },
         choices: employeeArray
