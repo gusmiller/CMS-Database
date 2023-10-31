@@ -54,6 +54,8 @@ const messages = {
     viewallroles: chalk.bgWhite("Information from Roles Table"),
     viewallrolesnodata: chalk.bgRed("There was no data in Roles Table"),
     employeedeleted: chalk.bgRed("Employee has been deleted!"),
-
+    addingdepartment: chalk.bgWhite("Adding a new department to database - enter Cancel to cancel action"),
+    addingroles:chalk.bgWhite("Adding a new Role to database - enter Cancel to cancel action"),
+    addingemployee:chalk.bgWhite("Adding a new Employee to database - enter Cancel to cancel action"),
 }
 module.exports = { sql, messages };

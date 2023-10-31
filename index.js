@@ -64,10 +64,7 @@ async function init() {
     let responseinquirer;
     let sSql = dic.sql.managers;
 
-    process.stdout.write("\x1Bc");
-    // for (var x=1; x<30; x++){
-    //     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-    // }
+    format.carletonlogo();
 
     while (!exit) {
         const answer = await inquirer.prompt(questions.operations);
@@ -143,7 +140,7 @@ async function init() {
                         if (response.count > 0) {
                             ssql = dic.sql.deleteemployee + `$`
                             await dataset.executeSQL();
-                        } 
+                        }
 
                         await dataset.executeSQL(`delete from employee where id=${employeeId};`);
                         headerslog(dic.messages.employeebymanagers);
@@ -263,7 +260,7 @@ async function init() {
                     headerslog(dic.messages.viewallroles);
 
                     // Format table header - blue background
-                    console.log(chalk.blueBright(`${format.resize("Role Tile", 40)} ${format.resize("ID", 5)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 15)}`));
+                    console.log(chalk.bgCyan(`${format.resize("Role Tile", 40)} ${format.resize("ID", 5)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 15)}`));
                     for (const row of dsRoles.rows) {
                         console.log(`${format.resize(row.title, 40)} ${format.resize(row.id.toString(), 5)} ${format.resize(row.name, 30)} ${format.money(row.salary)}`);
                     }
@@ -272,35 +269,52 @@ async function init() {
                 break;
 
             case "Add a Department":
-                const departmentresponse = await inquirer.prompt(questions.department);
-                response = await dataset.addDepartment(departmentresponse.department);
-                console.log(response);
+                headerslog(dic.messages.addingdepartment);
+                responseinquirer = await inquirer.prompt(questions.department);
+
+                if (responseinquirer.department !== "Cancel" && responseinquirer.department !== "cancel") {
+                    response = await dataset.addDepartment(responseinquirer.department);
+                    console.log(response);
+                }
                 break;
 
             case "Add a Role":
+                headerslog(dic.messages.addingroles);
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
-                const rolesresponse = await inquirer.prompt(questions.roles);
-                await dataset.loadArray(questions, dic.sql.roles, "roles");
-                console.log(response);
+                responseinquirer = await inquirer.prompt(questions.roleactions);
+
+                if (responseinquirer.rolename !== "Cancel" && responseinquirer.rolename !== "cancel") {
+                    response = await dataset.addRole(responseinquirer.rolename);
+                    console.log(response);
+                }
                 break;
 
             case "Add an Employee":
+                headerslog(dic.messages.addingemployee);
                 await dataset.loadArray(questions, dic.sql.roles, "roles");
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
 
                 const employeeresponse = await inquirer.prompt(questions.employee);
-                response = await dataset.addEmployee(employeeresponse);
-                console.log(response);
+                if (employeeresponse.firstname !== "Cancel" && employeeresponse.firstname !== "cancel") {
+                    response = await dataset.addEmployee(employeeresponse);
+                    console.log(response);
+                }
                 break;
 
             case "Update an Employee Role":
-                await dataset.loadArray(questions, dic.sql.allemployees, "employees");
+                await dataset.loadArray(questions, dic.sql.allemployees, "employees", "Cancel");
                 const usereesponse = await inquirer.prompt(questions.updateEmployee);
+                if (usereesponse.updateemployee !== "Cancel") {
 
-                resultArr = await dataset.loadRoles(questions, usereesponse);
-                const roleupdate = await inquirer.prompt(questions.updateRole);
-                response = await dataset.updateEmployee(usereesponse, roleupdate);
-                console.log(response);
+                    resultArr = await dataset.loadRoles(questions, usereesponse);
+                    questions.rolesArray.push("Cancel");
+                    const roleupdate = await inquirer.prompt(questions.updateRole);
+                    if (roleupdate.updaterole !== "Cancel") {
+                        response = await dataset.updateEmployee(usereesponse, roleupdate);
+                        console.log(response);
+                    }
+                    
+                }
                 break;
 
             case "Finish":

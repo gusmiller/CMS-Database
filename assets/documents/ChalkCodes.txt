@@ -1,0 +1,26 @@
+red - 31m / 39m
+green - 32m / 39m
+yellow - 33m / 39m
+blue - 34m / 39m
+magenta - 35m / 39m
+cyan - 36m / 39m
+redBright - 91m / 39m
+greenBright - 92m / 39m
+yellowBright - 93m / 39m
+blueBright - 94m / 39m
+magentaBright - 95m / 39m
+cyanBright - 96m / 39m
+bgBlack - 40m / 49m
+bgRed - 41m / 49m
+bgGreen - 42m / 49m
+bgYellow - 43m / 49m
+bgBlue - 44m / 49m
+bgMagenta - 45m / 49m
+bgCyan - 46m / 49m
+bgRedBright - 101m / 49m
+bgGreenBright - 102m / 49m
+bgYellowBright - 103m / 49m
+bgBlueBright - 104m / 49m
+bgMagentaBright - 105m / 49m
+bgCyanBright - 106m / 49m
+
