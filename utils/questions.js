@@ -99,7 +99,7 @@ const deletedata = [
         name: "deletedKey",
         pageSize: 20,
         message: chalk.magenta("Please select Employee to delete:"),
-        when(answer) { 
+        when(answer) {
             return answer.actionperform === "Delete Employees";
         },
         choices: employeeArray
@@ -141,7 +141,7 @@ const department = [
     {
         type: "input",
         name: "department",
-        message: chalk.magenta("Please enter Name of Department you like to add:"),
+        message: chalk.magenta("Please enter Name of Department you like to add (enter exit to end):"),
         validate(answer) {
             if (answer.length == 0) {
                 return chalk.red('You must provide a valid name for Department! Press Ctrl-C to cancel');
@@ -175,7 +175,8 @@ const roleactions = [
         name: "salary",
         message: chalk.magenta("Please enter Role's base Salary:"),
         when(answer) {
-            return answer.rolename.length != 0;
+            const validaeentry = answer.rolename.toLowerCase();
+            return answer.rolename.length != 0 && validaeentry !== "cancel";
         },
         validate(answer) {
             if (answer == 0 || !isNumeric(answer)) {
@@ -183,12 +184,15 @@ const roleactions = [
             }
             return true;
         }
-
     },
     {
         type: "list",
         name: "department",
         message: chalk.magenta("Please enter Name of Department:"),
+        when(answer) {
+            const validaeentry = answer.rolename.toLowerCase();
+            return answer.rolename.length != 0 && validaeentry !== "cancel";
+        },
         choices: departmentsArray,
         validate(answer) {
             if (answer.length == 0) {
@@ -220,7 +224,8 @@ const employee = [
         name: "lastname",
         message: chalk.greenBright("Please enter Last name to add:"),
         when(answer) {
-            return answer.firstname.length != 0;
+            const validaeentry = answer.firstname.toLowerCase();
+            return answer.firstname.length != 0 && validaeentry !== "cancel";
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -238,7 +243,12 @@ const employee = [
         message: chalk.greenBright("Please enter what would be their Role:"),
         choices: rolesArray,
         when(answer) {
-            return answer.firstname.length != 0 && answer.lastname.length != 0;
+            const validaeentry = answer.firstname.toLowerCase();
+            if (validaeentry==="cancel"){
+                return false;
+            }else{
+                return answer.firstname.length != 0 && answer.lastname.length != 0;
+            }            
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -254,7 +264,8 @@ const employee = [
         message: chalk.greenBright("Who will be their manager?:"),
         choices: employeeArray,
         when(answer) {
-            return employeeArray.length != 0;
+            const validaeentry = answer.firstname.toLowerCase();
+            return validaeentry !== "cancel" && employeeArray.length != 0;
         },
         validate(answer) {
             if (answer.length == 0) {

@@ -16,6 +16,7 @@
 	<ol>
 		<li><a href="#Description">SQL: Employee Tracker Description</a></li>
 		<li><a href="#installation">Installation</a></li>
+		<li><a href="#technology">Technology Stack</a></li>
 		<li><a href="#license">License</a></li>
 		<li><a href="#usage">Application Usage</a></li>
 		<li><a href="#contactme">Questions? Contact Me!</a></li>
@@ -25,14 +26,14 @@
 
 ## SQL Employer Tracker
 
-Description entered automatically by Lorem Ipsum. Aut, nobis quod earum, dolores accusamus modi libero possimus nam et aliquam non, blanditiis saepe. quod earum, dolores accusamus modi libero possimus nam et. Aut, nobis quod earum, dolores accusamus modi libero possimus nam et aliquam non, blanditiis saepe. quod earum, dolores accusamus modi libero possimus nam et.
+As we advance in our training we learn new skills and technology. This week is all about SQL - MySQL. Based on the assignments description we have this challenge. Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus natus iure dolorum aperiam itaque? Ipsam ad quidem quo neque aliquam natus blanditiis totam. Rerum accusantium fugit, alias numquam tenetur nemo necessitatibus laudantium officiis. Reprehenderit dolor labore iusto ut minus fugiat tempora, expedita corrupti. Ab tenetur similique ipsa dolore odio earum aliquam animi ducimus optio quibusdam ipsam eos ipsum perferendis, perspiciatis quasi temporibus. Aliquam perspiciatis dolorum est expedita quo possimus, quas temporibus pariatur mollitia debitis. Ducimus sapiente impedit culpa eos alias voluptas minima corporis veniam commodi perspiciatis. At quaerat quas porro veritatis sapiente nihil fugit cumque voluptatum voluptatem recusandae alias nulla iusto, quam exercitationem, ipsa corrupti possimus eligendi repellendus!
+The SQL Employer Tracker database was created in MySQL Server, using MSQY Workbench, but I have included a script that creates the database in case required. The initial database will not have any data; there is no seeding scripts
 
 Here is my product!
 
 <div style="margin-top: 15px;">
-	<img src="./assets/images/node001.png">
+	<img src="./assets/images/SQL0001.png">
 </div>
 </div>
 
@@ -62,6 +63,10 @@ Please follow the instructions to install the CLI Employee Tracker application
 
 <div id="license" style="margin-top: 25px;">
 
+## Technology Stack
+
+
+<div id="license" style="margin-top: 25px;">
 ## License
 
 MIT License
