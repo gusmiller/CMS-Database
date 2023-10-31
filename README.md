@@ -4,8 +4,9 @@
 
 <p align="center" style="margin-top:25px; margin-bottom:50px;">
 	<a><img src="https://img.shields.io/static/v1.svg?label=javascript&message=Language&color=purple"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=nodejs&message=Server&color=blue"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=CSS3&message=Cascade Sheets&color=green"/></a>
+	<a><img src="https://img.shields.io/static/v1.svg?label=nodejs&message=Inquirer&color=blue"/></a>
+	<a><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a>
+	<a><img src="https://img.shields.io/static/v1.svg?label=Oracle&message=MySQL&color=blue"/></a>
 	<a><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=green"/></a>
 </p>
 
