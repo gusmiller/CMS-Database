@@ -4,7 +4,8 @@
   "description": "This node script application will create the employees database and allow user to add information to tables using inquirer. This is part of my assignment at Carleton Coding Bootcamp",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dbinit": ""
   },
   "repository": {
     "type": "git",
