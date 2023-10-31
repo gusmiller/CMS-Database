@@ -43,20 +43,15 @@ Here is my product!
 
 ## Installation
 
-Please follow the instructions to install the CLI Employee Tracker application
+1. Install Node 18 or later. You can use the package managerof your choice.
+   Tests need to pass in Node 18 and 20.
+2. Clone this repository. [git clone git@github.com:gusmiller/CMS-Database.git][]
+3. Run `npm ci` to install the dependencies.
+4. Run `npm start` to start the badge server and the frontend dev server.
+5. Run `npm emp` to generate the database.
 
-1. Clone the SQL Employer Tracker repository
-	```js
-	https://github.com/gusmiller/CMS-Database
-	```
-2. Install NPM Packaged
-	```js
-	npm install
-	```
-3. Run CLI application
-	```js
-	node index.js
-	```
+Note: you must have MySQL installed and configured in your computer. You must have your application  configured and ready to use. 
+
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
