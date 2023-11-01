@@ -28,10 +28,10 @@ const actionlist = [
     "Clear Terminal"
 ]
 
-let departmentsArray = [];
-let rolesArray = [];
-let employeeArray = [];
-let managersArray = [];
+let departmentsArray = []; //Departments arrays
+let rolesArray = []; //Roles array
+let employeeArray = []; //Employees array
+let managersArray = []; //Managers array
 
 let hours = new Date().getHours();
 hours = (hours + 24 - 2) % 24;
@@ -277,6 +277,10 @@ const employee = [
     }
 ]
 
+/**
+ * Delete confirm question Yes/No. Used in diffent places to confirm selection or 
+ * action.
+ */
 const yesnoConfirm = [
     {
         type: "confirm",
@@ -285,6 +289,8 @@ const yesnoConfirm = [
     }
 ]
 
+// Function uses regular expressions to validate whether the entry is numeric or
+// not.
 function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }

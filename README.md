@@ -169,7 +169,7 @@ The current application contains the following questions:
 		<li>Delete Departments</li>
 		<li>Delete Employee</li>
 	</ul>	
-	<li>Update Employee</li>
+	<li>Update Employee's Role</li>
 	<ul>
 		<li>Select the Employee you like to update?</li>
 		<li>Select the new Role for the selected Employee?</li>
@@ -194,6 +194,27 @@ The current application contains the following questions:
 	<li>Finish</li>
 	<li>Clear Terminal</li>
 </ul>
+
+### Data Validation and Flow
+The application does all sorts of validations. Taking as an example the Role: We are promoting an employee to a new Role. Application should be able to allow user to change employee's current Role to a new one. These are the steps in the process:
+
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>1. Select option to update Employee's Role from the dropdown list.</summary>
+<p align="center"><img src="./assets/images/SQL0005.png" height="450"></p>
+</details>
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>2. Select from list of Employee's who is up for promotion.</summary>
+<p align="center"><img src="./assets/images/SQL0006.png" height="450"></p>
+</details>
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>3. Select from list of Roles the new Role to be assigned. Notice! The current Role is NOT included in the list, we are not promoting an Employee to current role.</summary>
+<p align="center"><img src="./assets/images/SQL0007.png" height="450"></p>
+</details>
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>4. New Role is assigned to the Employee!</summary>
+<p align="center"><img src="./assets/images/SQL0007.png" height="450"></p>
+<p align="center">Congratulations! you may now proceed in taking Employee for dinner!</p>
+</details>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -37,7 +37,8 @@ const sql = {
     deleteemployee: `delete from employee`,
     getemployeeid: 'SELECT id, first_name, last_name from employee where ',
     getemployeemanager: `select * from employee where manager_id=`,
-    updateemployeemanager: `update employee set manager_id=null where manager_id=`
+    updateemployeemanager: `update employee set manager_id=null where manager_id=`,
+    geteemployee: `select * from (select employee.*, concat_ws(" ", first_name, last_name) as fullname, role.title from employee join role on role.id=employee.role_id) as data `,
 }
 
 const messages = {
@@ -58,5 +59,6 @@ const messages = {
     addingroles:chalk.bgWhite("Adding a new Role to database - enter Cancel to cancel action"),
     addingemployee:chalk.bgWhite("Adding a new Employee to database - enter Cancel to cancel action"),
     requestcanceled:chalk.bgRed("Your request has been cancelled! No changes done."),
+    employeerole:chalk.bgYellow(`Employee selected `),
 }
 module.exports = { sql, messages };

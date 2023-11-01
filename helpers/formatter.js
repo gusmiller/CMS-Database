@@ -13,6 +13,36 @@ const chalk = require('chalk');
 
 const formatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD',});
 
+function messagelogger(value, add) {
+    if (value === undefined) {
+        console.log("");
+        return;
+    }
+
+    // Validate for chalk colors
+    if (value.lastIndexOf("39m") || value.lastIndexOf("49m")) {
+        let firstthree = value.substring(0, 5); // Retrieve the first 3 characters
+        let lastfive = value.substring(value.length - 5); // Get the last portion
+
+        let newvalue = value.substring(5); // Remove chalk characters
+        newvalue = newvalue.slice(0, -5);
+
+        // validate additional information to be added into the message. This will basically
+        // inject the tail message to inherit the color
+        if(add!==undefined){
+            newvalue+= add;
+        }
+
+        const padding = " ".repeat(140 - newvalue.length); // Build the fixed length string
+        console.log(firstthree + newvalue + padding + lastfive); // Put message all back togeher 
+    } else {
+        console.log(value);
+    }
+
+    console.log("");
+    return;
+}
+
 function money(value){
     return formatter.format(value);
 };
@@ -51,4 +81,4 @@ function carletonlogo(){
     console.log("");
 
 }
-module.exports = {money, resize, nodata, carletonlogo};
+module.exports = {money, resize, nodata, carletonlogo, messagelogger};
