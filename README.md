@@ -19,9 +19,9 @@
 		<li><a href="#installation">Installation</a></li>
 		<li><a href="#technology">Technology Stack</a></li>
 		<li><a href="#database">Employee Database</a></li>
-		<li><a href="#license">License</a></li>
 		<li><a href="#usage">Application Usage</a></li>
 		<li><a href="#contactme">Questions? Contact Me!</a></li>
+		<li><a href="#license">License</a></li>
 	</ol>
 </details>
 <div id="Description" style="margin-top: 25px;">
@@ -118,26 +118,6 @@ All queries that produce a dataset are shown formatted in columns with desire co
 
 </details>
 
-<div id="license" style="margin-top: 25px;">
-
-## License
-
-MIT License
-
-Copyright (c) 2023 SQL Employer Tracker
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-<a><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=yellow"/></a>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-</div>
-
 <div id="usage" style="margin-top: 25px;">
 
 ## Application Usage
@@ -212,9 +192,11 @@ The application does all sorts of validations. Taking as an example the Role: We
 </details>
 <details style="margin-bottom: 25px; margin-top: 25px;"> 
 	<summary>4. New Role is assigned to the Employee!</summary>
-<p align="center"><img src="./assets/images/SQL0007.png" height="450"></p>
+<p align="center"><img src="./assets/images/SQL0008.png" height="450"></p>
 <p align="center">Congratulations! you may now proceed in taking Employee for dinner!</p>
 </details>
+
+<span style="background-color:#A1CAF1;color:black;">Note: at all the time user has a way to cancel a request. In case user has made a mistake or decides not to proceed, look for the "cancel" option in the dropdown list.</span>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -229,6 +211,26 @@ The purpose of this SQL Employer Tracker is to help developers create their proj
 Do not hesitate in contacting me, Gustavo Miller - gustavo.miller@miller-hs.com.
 
 You may find the application at: https://github.com/gusmiller/CMS-Database/blob/main/README.md
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+</div>
+
+<div id="license" style="margin-top: 25px;">
+
+## License
+
+MIT License
+
+Copyright (c) 2023 SQL Employer Tracker
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+<a><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=yellow"/></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
