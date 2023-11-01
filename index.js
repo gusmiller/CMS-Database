@@ -71,10 +71,14 @@ async function init() {
 
         switch (answer.actionperform) {
             case "\u001b[31mDelete Data\u001b[39m":
+
+                // Inquierer uses arrays for its options; we need to load this information dynamically,
+                // it is possible that user added new data. Information cannot be harcoded.
                 await dataset.loadArray(questions, dic.sql.departments, "departments", "Go back");
                 await dataset.loadArray(questions, dic.sql.roles, "rolesarray", "Go back");
                 await dataset.loadArray(questions, dic.sql.employeelist, "employeesall", "Go back");
 
+                // Call inquirer and retrieve information from te user
                 responseinquirer = await inquirer.prompt(questions.deletedata);
                 let deletedId = 0;
 
@@ -82,7 +86,7 @@ async function init() {
                     case "Delete Departments":
                         deleteId = responseinquirer.deletedKey;
                         sSql = dic.sql.validatedepartment + ` where name="${responseinquirer.deletedKey}"`;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
 
                         if (response.count > 0) {
                             headerslog(dic.messages.departmentused); // Display message
@@ -107,10 +111,12 @@ async function init() {
                     case "Delete Roles":
                         deleteId = responseinquirer.deletedKey;
                         sSql = dic.sql.validaterole + `"${responseinquirer.deletedKey}"`;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
 
                         if (response.count > 0) {
                             headerslog(dic.messages.roleused);
+
+                            // Call inquirer and retrieve information from te user
                             responseinquirer = await inquirer.prompt(questions.yesnoConfirm);
 
                             // Validate the role is not already assigned. In case it is assigned then we will re-assign the 
@@ -131,11 +137,11 @@ async function init() {
                     case "Delete Employees":
                         const splitName = responseinquirer.deletedKey.split(' ');
                         sSql = dic.sql.getemployeeid + `first_name="${splitName[0]}" and last_name="${splitName[1]}";`;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
                         const employeeId = response.rows[0].id;
 
                         sSql = dic.sql.getemployeemanager + `${employeeId};`;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
 
                         if (response.count > 0) {
                             ssql = dic.sql.deleteemployee + `$`
@@ -153,12 +159,14 @@ async function init() {
 
             case "\u001b[32mView Data\u001b[39m":
                 await dataset.loadArray(questions, dic.sql.managers, "managers", "Go Back");
+
+                // Call inquirer and retrieve information from te user
                 responseinquirer = await inquirer.prompt(questions.viewdata);
 
                 switch (responseinquirer.actionperform) {
                     case "Employees by Managers (ALL)":
                         sSql = dic.sql.empbymanager + ` order by Manager, id`
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
                         headerslog(dic.messages.employeebymanagers)
 
                         // Format Employees by Manager header
@@ -173,7 +181,7 @@ async function init() {
                     case "Employees by Manager":
                         if (responseinquirer.managername != "Go Back") {
                             sSql = dic.sql.empbymanager + ` WHERE Manager="${responseinquirer.managername}" ORDER BY id;`
-                            response = await dataset.getTable(sSql);
+                            response = await dataset.getTable(sSql); // Retrieve data from table
                             headerslog(chalk.bgWhite(`List of Employees under management of ${responseinquirer.managername}`))
 
                             // Format Employees by Manager header
@@ -188,7 +196,7 @@ async function init() {
 
                     case "Employees by Department":
                         sSql = dic.sql.empbydepartment;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
                         headerslog(dic.messages.employeesbydepartment)
 
                         // Format Employees by Manager header
@@ -203,7 +211,7 @@ async function init() {
 
                     case "Departments Budget":
                         sSql = dic.sql.departmentbudget + ` order by id`;
-                        response = await dataset.getTable(sSql);
+                        response = await dataset.getTable(sSql); // Retrieve data from table
                         headerslog(dic.messages.departmentsbudget)
 
                         // Format Employees by Manager header
@@ -219,7 +227,7 @@ async function init() {
                 break;
 
             case "View All Employees":
-                const dsEmployee = await dataset.getTable(dic.sql.employees);
+                const dsEmployee = await dataset.getTable(dic.sql.employees); // Retrieve data from table
 
                 if (dsEmployee.count == 0) {
                     format.nodata(dic.messages.viewallemployeesnodata);
@@ -237,7 +245,7 @@ async function init() {
                 break;
 
             case "View All Departments":
-                const dsDepartment = await dataset.getTable("department");
+                const dsDepartment = await dataset.getTable("department"); // Retrieve data from table
                 if (dsDepartment.count == 0) {
                     format.nodata(dic.messages.viewalldepartmentsnodata);
                 } else {
@@ -253,7 +261,8 @@ async function init() {
                 break;
 
             case "View All Roles":
-                const dsRoles = await dataset.getTable(dic.sql.allroles);
+                const dsRoles = await dataset.getTable(dic.sql.allroles); // Retrieve data from table
+
                 if (dsRoles.count == 0) {
                     format.nodata(dic.messages.viewallrolesnodata);
                 } else {
@@ -270,22 +279,33 @@ async function init() {
 
             case "Add a Department":
                 headerslog(dic.messages.addingdepartment);
+
+                // Call inquirer and retrieve information from te user
                 responseinquirer = await inquirer.prompt(questions.department);
 
+                // Validate user has not cancelled request
                 if (responseinquirer.department !== "Cancel" && responseinquirer.department !== "cancel") {
                     response = await dataset.addDepartment(responseinquirer.department);
                     console.log(response);
+                } else {
+                    headerslog(dic.messages.requestcanceled); // Request was cancelled by user
                 }
+
                 break;
 
             case "Add a Role":
                 headerslog(dic.messages.addingroles);
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
+
+                // Call inquirer and retrieve information from te user
                 responseinquirer = await inquirer.prompt(questions.roleactions);
 
+                // Validate user has not cancelled request
                 if (responseinquirer.rolename !== "Cancel" && responseinquirer.rolename !== "cancel") {
                     response = await dataset.addRole(responseinquirer.rolename);
                     console.log(response);
+                } else {
+                    headerslog(dic.messages.requestcanceled); // Request was cancelled by user
                 }
                 break;
 
@@ -294,26 +314,42 @@ async function init() {
                 await dataset.loadArray(questions, dic.sql.roles, "roles");
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
 
+                // Call inquirer and retrieve information from te user
                 const employeeresponse = await inquirer.prompt(questions.employee);
+
+                // Validate user has not cancelled request
                 if (employeeresponse.firstname !== "Cancel" && employeeresponse.firstname !== "cancel") {
                     response = await dataset.addEmployee(employeeresponse);
                     console.log(response);
+                } else {
+                    headerslog(dic.messages.requestcanceled); // Request was cancelled by user
                 }
                 break;
 
             case "Update an Employee Role":
                 await dataset.loadArray(questions, dic.sql.allemployees, "employees", "Cancel");
+
+                // Call inquirer and retrieve information from te user
                 const usereesponse = await inquirer.prompt(questions.updateEmployee);
+
+                // Validate user has not cancelled request. Note that this one differs from other validations
                 if (usereesponse.updateemployee !== "Cancel") {
 
                     resultArr = await dataset.loadRoles(questions, usereesponse);
                     questions.rolesArray.push("Cancel");
+
+                    // Call inquirer and retrieve information from te user
                     const roleupdate = await inquirer.prompt(questions.updateRole);
+
+                    // Validate user has not cancelled request. Note that this one is different than others
                     if (roleupdate.updaterole !== "Cancel") {
                         response = await dataset.updateEmployee(usereesponse, roleupdate);
                         console.log(response);
+                    } else {
+                        headerslog(dic.messages.requestcanceled); // Request was cancelled by user
                     }
-                    
+                } else {
+                    headerslog(dic.messages.requestcanceled); // Request was cancelled by user
                 }
                 break;
 

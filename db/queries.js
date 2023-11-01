@@ -57,5 +57,6 @@ const messages = {
     addingdepartment: chalk.bgWhite("Adding a new department to database - enter Cancel to cancel action"),
     addingroles:chalk.bgWhite("Adding a new Role to database - enter Cancel to cancel action"),
     addingemployee:chalk.bgWhite("Adding a new Employee to database - enter Cancel to cancel action"),
+    requestcanceled:chalk.bgRed("Your request has been cancelled! No changes done."),
 }
 module.exports = { sql, messages };
