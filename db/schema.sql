@@ -5,10 +5,10 @@
  * Assignment #12 - SQL Content Management Systems (CMS)
  * Date : 10/31/2023 9:57:40 AM
  *******************************************************************/
-CREATE SCHEMA IF NOT EXISTS employees_db DEFAULT CHARACTER
+CREATE SCHEMA IF NOT EXISTS employeedb DEFAULT CHARACTER
 SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
-USE employees_db;
+USE employeedb;
 
 -- Drop and Create Departments table
 DROP TABLE IF EXISTS department;

@@ -9,8 +9,11 @@
  * Database: employees_db
  * Server version	8.0.34
  *******************************************************************/
+DROP DATABASE IF EXISTS employeedb;
+CREATE DATABASE employeedb;
+
 DROP TABLE IF EXISTS department;
-CREATE TABLEdepartment ( id int NOT NULL AUTO_INCREMENT, name varchar(30) NOT NULL, PRIMARY KEY (id)
+CREATE TABLE department ( id int NOT NULL AUTO_INCREMENT, name varchar(30) NOT NULL, PRIMARY KEY (id)
   ) ENGINE = InnoDB AUTO_INCREMENT = 23 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 LOCK TABLES department WRITE;
