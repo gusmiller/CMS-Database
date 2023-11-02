@@ -328,7 +328,7 @@ async function init() {
 
                 // Validate user has not cancelled request
                 if (responseinquirer.rolename !== "Cancel" && responseinquirer.rolename !== "cancel") {
-                    response = await dataset.addRole(responseinquirer.rolename);
+                    response = await dataset.addRole(responseinquirer);
                     format.messagelogger(response);
                 } else {
                     format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
@@ -337,7 +337,7 @@ async function init() {
 
             case "Add an Employee":
                 format.messagelogger(dic.messages.addingemployee);
-                await dataset.loadArray(questions, dic.sql.roles, "roles");
+                await dataset.loadArray(questions, dic.sql.roles, "rolesarray");
                 await dataset.loadArray(questions, dic.sql.departments, "departments");
 
                 // Call inquirer and retrieve information from te user
@@ -346,7 +346,7 @@ async function init() {
                 // Validate user has not cancelled request
                 if (employeeresponse.firstname !== "Cancel" && employeeresponse.firstname !== "cancel") {
                     response = await dataset.addEmployee(employeeresponse);
-                    format.messagelogger(response);
+                    format.messagelogger(response, null, null, 80);
                 } else {
                     format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
                 }
@@ -376,7 +376,7 @@ async function init() {
                     // Validate user has not cancelled request. Note that this one is different than others
                     if (roleupdate.updaterole !== "Cancel") {
                         response = await dataset.updateEmployee(usereesponse, roleupdate);
-                        format.messagelogger(response, ` to ${roleupdate.updaterole}`);
+                        format.messagelogger(`Employee ${response} has been updated to ${roleupdate.updaterole}`, null, null, 80);
                     } else {
                         format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
                     }
