@@ -23,10 +23,11 @@ const fs = require("fs");
 // The fs.readFileSync() method is an inbuilt application programming interface of 
 // the fs module which is used to read the file and return its content. 
 // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
-const sSchema = fs.readFileSync("./db/schema.sql", "utf8");
+const sSchema = fs.readFileSync("./db/schemadata.sql", "utf8");
 
 let questions = require("./utils/questions");
 const dataset = require("./utils/data");
+const initdatabase = require("./db/initdb");
 const format = require("./helpers/formatter");
 const dic = require("./db/queries");
 
@@ -42,6 +43,52 @@ async function init() {
     let sSql = dic.sql.managers;
 
     format.carletonlogo();
+    response = await initdatabase.validateDB(process.env.DB_NAME); // Retrieve data from table
+
+    if (response.count === 0) {
+        responseinquirer = await inquirer.prompt(questions.nodatabase);
+        if (responseinquirer.yesnoconfirm) {
+
+            // The fs.readFileSync() method is an inbuilt application programming interface of 
+            // the fs module which is used to read the file and return its content. 
+            // https://www.geeksforgeeks.org/node-js-fs-readfilesync-method/
+            let sInitDbSql = fs.readFileSync('./db/schema.sql', 'utf-8');
+            let sInitData = fs.readFileSync('./db/schemadata.sql', 'utf-8');
+
+            sInitDbSql = format.parseSqlFile(sInitDbSql);
+            response = await initdatabase.executeSQL(sInitDbSql);
+
+            if (response) {
+
+                sInitDbSql = format.parseSqlFile(sInitData);
+                response = await initdatabase.runQuery(sInitDbSql);
+                process.stdout.write("\x1Bc");
+
+            } else {
+                process.exit();
+            }
+
+        } else {
+
+            format.messagelogger(dic.messages.createdbfirst, null, 0);
+            format.messagelogger(dic.messages.createdbhelp, null, 0);
+            format.messagelogger(dic.messages.pressctrlc, null, 0);
+            exit = true;
+            process.exit();
+
+        }
+    }
+
+    format.messagelogger(dic.messages.totalrecords, ` (${chalk.red(process.env.DB_NAME)})`, null, 80)
+    response = await dataset.getTable(dic.sql.totalrecords); // Retrieve data from table
+
+    // Format Employees by Manager header
+    console.log(chalk.bgCyan(`${format.resize("Table Name", 15)} ${format.resize("Total Records", 25)}`));
+
+    for (const row of response.rows) {
+        console.log(`${format.resize(row.Tablename, 15)} ${format.resize(row.Total, 25)}`);
+    }
+    format.messagelogger();
 
     while (!exit) {
         const answer = await inquirer.prompt(questions.operations);
@@ -65,7 +112,7 @@ async function init() {
                         sSql = dic.sql.validatedepartment + ` where name="${responseinquirer.deletedKey}"`;
                         response = await dataset.getTable(sSql); // Retrieve data from table
 
-                        if (response.count > 0) { 
+                        if (response.count > 0) {
                             format.messagelogger(dic.messages.departmentused); // Display message
 
                             // Call inquirer and retrieve information from te user
@@ -128,7 +175,7 @@ async function init() {
                         }
 
                         await dataset.executeSQL(`delete from employee where id=${employeeId};`);
-                        format.messagelogger(dic.messages.employeebymanagers);
+                        format.messagelogger(dic.messages.employeebymanagers, null, null, 80);
                         break;
 
                     case "Exit":
@@ -146,7 +193,7 @@ async function init() {
                     case "Employees by Managers (ALL)":
                         sSql = dic.sql.empbymanager + ` order by Manager, id`
                         response = await dataset.getTable(sSql); // Retrieve data from table
-                        format.messagelogger(dic.messages.employeebymanagers)
+                        format.messagelogger(dic.messages.employeebymanagers, null, null, 80)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("Manager", 25)} ${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role ID", 5)} ${format.resize("Role Title", 25)}`));
@@ -176,7 +223,7 @@ async function init() {
                     case "Employees by Department":
                         sSql = dic.sql.empbydepartment;
                         response = await dataset.getTable(sSql); // Retrieve data from table
-                        format.messagelogger(dic.messages.employeesbydepartment)
+                        format.messagelogger(dic.messages.employeesbydepartment, null, null, 80)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Fullname", 25)} ${format.resize("Title", 40)} ${format.resize("Salary", 25)}`));
@@ -191,7 +238,7 @@ async function init() {
                     case "Departments Budget":
                         sSql = dic.sql.departmentbudget + ` order by id`;
                         response = await dataset.getTable(sSql); // Retrieve data from table
-                        format.messagelogger(dic.messages.departmentsbudget)
+                        format.messagelogger(dic.messages.departmentsbudget, null, null, 80)
 
                         // Format Employees by Manager header
                         console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Department", 30)} ${format.resize("Budget", 25)}`));
@@ -209,9 +256,9 @@ async function init() {
                 const dsEmployee = await dataset.getTable(dic.sql.employees + ` order by title`); // Retrieve data from table
 
                 if (dsEmployee.count == 0) {
-                    format.nodata(dic.messages.viewallemployeesnodata);
+                    format.nodata(dic.messages.viewallemployeesnodata, null, null, 80);
                 } else {
-                    format.messagelogger(dic.messages.viewallemployees, ` (ordered by title)`);
+                    format.messagelogger(dic.messages.viewallemployees, ` (ordered by title)`, null, 80);
 
                     // Format table header
                     console.log(chalk.bgCyan(`${format.resize("ID", 5)} ${format.resize("Fullname", 25)} ${format.resize("Role Title", 30)} ${format.resize("Department Name", 30)} ${format.resize("Manager", 25)} ${format.resize("Salary", 12)}`));
@@ -229,7 +276,7 @@ async function init() {
                 if (dsDepartment.count == 0) {
                     format.nodata(dic.messages.viewalldepartmentsnodata);
                 } else {
-                    format.messagelogger(dic.messages.viewalldepartments, ` (order by id)`);
+                    format.messagelogger(dic.messages.viewalldepartments, ` (order by id)`, null, 80);
 
                     // Format table header - yello background
                     console.log(chalk.yellow(`${format.resize("ID", 5)} ${format.resize("Department Name", 50)}`));
@@ -246,7 +293,7 @@ async function init() {
                 if (dsRoles.count == 0) {
                     format.nodata(dic.messages.viewallrolesnodata);
                 } else {
-                    format.messagelogger(dic.messages.viewallroles, ` (order by title)`);
+                    format.messagelogger(dic.messages.viewallroles, ` (order by title)`, null, 80);
 
                     // Format table header - blue background
                     console.log(chalk.bgCyan(`${format.resize("Role Tile", 40)} ${format.resize("ID", 5)} ${format.resize("Department Name", 30)} ${format.resize("Salary", 15)}`));
@@ -316,7 +363,7 @@ async function init() {
 
                     // Retrieve data from the employee table - this contains all fields from employee
                     resultArr = await dataset.getTable(dic.sql.geteemployee + `where fullname="${usereesponse.updateemployee}";`);
-                    const usermessage =`${usereesponse.updateemployee} currently has the role of ${resultArr.rows[0].title}`
+                    const usermessage = `${usereesponse.updateemployee} currently has the role of ${resultArr.rows[0].title}`
                     format.messagelogger(dic.messages.employeerole, usermessage);
 
                     // Loads the roles into array to be used by the iquirer
@@ -333,7 +380,7 @@ async function init() {
                     } else {
                         format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
                     }
-                    
+
                 } else {
                     format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
                 }

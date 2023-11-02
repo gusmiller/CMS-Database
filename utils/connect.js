@@ -27,4 +27,17 @@ async function database() {
     }
 }
 
-module.exports = database;
+async function validatedatabase(value) {
+    try {
+        const connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+        });
+        return connection;
+    } catch (error) {
+        console.error('Error connecting to the database:', error);
+    }
+}
+
+module.exports = { database, validatedatabase };

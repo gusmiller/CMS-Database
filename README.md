@@ -122,7 +122,28 @@ All queries that produce a dataset are shown formatted in columns with desire co
 
 ## Application Usage
 
-The application is very simple and easy to use. User will be presented with a number of predefined options from where they can decide which data to retrieve from database. Database has been seeded with fake names, department names, and roles to mimic a corporation. When creating new departments, roles or employees profiles, the application will validate whether this information already exists or not, Proper message will be displayed to the user in case information already exist.
+The application is very simple and easy to use. User will be presented with a number of predefined options from where they can decide which data to retrieve from database. Database can initialized and seeded with fake names, department names, and roles, to mimic a real corporation organizatin. It is critical and part of a database design that we prevent data duplication. Therefore, when creating new departments, roles or employees profiles, the application will validate whether this information already exists or not, Proper message will be displayed to the user in case information already exist.
+
+But first we need a database. Read the following section to review how database is created.
+
+### Database Intialization
+
+The SQL Employer Tracker requires a the CRM database to be initialized before it can be used. I have provided scripts that can run from the MySQL Shell or MySQL Workbench, but the application database can be generated on the 'fly'. This allows inexperienced users to use the application when they launch it for the first time. When launching application for the first time, it performs a database validation -make sure database exists (which it won't). These are the database validation, initialization and seeding:
+
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>1. Application attempst to open database and it will not find it.</summary>
+<p align="center"><img src="./assets/images/SQL0011.png" height="450"></p>
+</details>
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>2. Application will generate Database, Tables and Seed tables.</summary>
+<p align="center"><img src="./assets/images/SQL0012.png" height="550"></p>
+</details>
+<details style="margin-bottom: 25px; margin-top: 25px;"> 
+	<summary>3. In case user decides NOT to create database process will terminate. Application cannot be accessed without a database.</summary>
+<p align="center"><img src="./assets/images/SQL0013.png" height="550"></p>
+</details>
+
+### Options available
 
 User will be able to browse information add information and delete information from database. All information retrieved from the database will be formatted and displayed on the screen.
 
@@ -176,7 +197,7 @@ The current application contains the following questions:
 </ul>
 
 ### Data Validation and Flow
-The application does all sorts of validations. Taking as an example the Role: We are promoting an employee to a new Role. Application should be able to allow user to change employee's current Role to a new one. These are the steps in the process:
+As mentioned before validations are important in a CRM database. The application does all sorts of validations. Taking the Roles as an example: We are promoting an employee to a new Role. Application should allow user to change employee's current Role to a new one -the promoted Role. These are the application steps in the process:
 
 <details style="margin-bottom: 25px; margin-top: 25px;"> 
 	<summary>1. Select option to update Employee's Role from the dropdown list.</summary>

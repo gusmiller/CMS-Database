@@ -13,6 +13,14 @@ const chalk = require('chalk');
 
 let deleteConfirm = "Are you sure you want to proceed?";
 
+const nodatabase = [
+    {
+        type: "confirm",
+        name: "yesnoconfirm",
+        message: chalk.red("Employee database has not been initialized! Would you like to initialize now?"),
+    }
+]
+
 const actionlist = [
 
     "View All Employees",
@@ -244,11 +252,11 @@ const employee = [
         choices: rolesArray,
         when(answer) {
             const validaeentry = answer.firstname.toLowerCase();
-            if (validaeentry==="cancel"){
+            if (validaeentry === "cancel") {
                 return false;
-            }else{
+            } else {
                 return answer.firstname.length != 0 && answer.lastname.length != 0;
-            }            
+            }
         },
         validate(answer) {
             if (answer.length == 0) {
@@ -295,4 +303,4 @@ function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray, yesnoConfirm, deleteConfirm }
+module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray, yesnoConfirm, deleteConfirm, nodatabase }

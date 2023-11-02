@@ -39,6 +39,7 @@ const sql = {
     getemployeemanager: `select * from employee where manager_id=`,
     updateemployeemanager: `update employee set manager_id=null where manager_id=`,
     geteemployee: `select * from (select employee.*, concat_ws(" ", first_name, last_name) as fullname, role.title from employee join role on role.id=employee.role_id) as data `,
+    totalrecords: `select "Roles" as Tablename, count(id) as Total from role UNION select "Departments" as Tablename, count(id) from department UNION select "Employees" as Tablename, count(id) from employee;`
 }
 
 const messages = {
@@ -60,5 +61,10 @@ const messages = {
     addingemployee:chalk.bgWhite("Adding a new Employee to database - enter Cancel to cancel action"),
     requestcanceled:chalk.bgRed("Your request has been cancelled! No changes done."),
     employeerole:chalk.bgYellow(`Employee selected `),
+    createdbfirst: chalk.bgRed("Unable to use the MySQL CMS Employee Database without a database. Initialize the database and try again..."),
+    createdbfirst: chalk.bgRed("Unable to use the MySQL CMS Employee application without a database. Initialize the database and try again..."),
+    createdbhelp: chalk.bgRed("You can try using MySQL Shell command. Login into your MySQL instance: mysql -u root -p and then try source db/schemadata.sql"),
+    pressctrlc: chalk.bgRed("Press Ctrl-C to terminate!"),
+    totalrecords:chalk.bgWhite(`CRM MySQL Employee Database`),
 }
 module.exports = { sql, messages };
