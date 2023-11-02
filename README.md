@@ -15,7 +15,7 @@
 <details style="margin-bottom: 25px; margin-top: 25px;">
 	<summary>Table of Contents</summary>
 	<ol>
-		<li><a href="#Description">SQL: Employee Tracker Description</a></li>
+		<li><a href="#Description">CMS Employee Tracker Description</a></li>
 		<li><a href="#installation">Installation</a></li>
 		<li><a href="#technology">Technology Stack</a></li>
 		<li><a href="#database">Employee Database</a></li>
@@ -26,13 +26,13 @@
 </details>
 <div id="Description" style="margin-top: 25px;">
 
-## SQL Employer Tracker
+## CMS Employee Tracker
 
 As we advance in our training we learn new skills and technology. This week is all about SQL - MySQL. Based on the assignments description we have this challenge. Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
 Once again we are 
 
-The SQL Employer Tracker database was created in MySQL Server, using MSQY Workbench, but I have included a script that creates the database in case required. The initial database will not have any data; there is no seeding scripts. Once again
+The CMS Employee Tracker database was created in MySQL Server, using MSQY Workbench, but I have included a script that creates the database in case required. The initial database will not have any data; there is no seeding scripts. Once again
 
 Here is my product!
 
@@ -82,7 +82,7 @@ Dependancies included in the package.json:
 
 ## Technology Stack
 
-The following should list any major frameworks/libraries used to in the designing and coding of **SQL Employer Tracker application**.
+The following should list any major frameworks/libraries used to in the designing and coding of **CMS Employee Tracker application**.
 This section  bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * <a href="https://www.npmjs.com/package/chalk"><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a> Make message colorful and pleasing to the eye
@@ -129,7 +129,7 @@ But first we need a database. Read the following section to review how database 
 
 ### Database Intialization
 
-The SQL Employer Tracker requires a the CRM database to be initialized before it can be used. I have provided scripts that can run from the MySQL Shell or MySQL Workbench, but the application database can be generated on the 'fly'. This allows inexperienced users to use the application when they launch it for the first time. When launching application for the first time, it performs a database validation -make sure database exists (which it won't). These are the database validation, initialization and seeding:
+The CMS Employee Tracker requires a the CMS Employee database to be initialized before it can be used. I have provided scripts that can run from the MySQL Shell or MySQL Workbench, but the application database can be generated on the 'fly'. This allows inexperienced users to use the application when they launch it for the first time. When launching application for the first time, it performs a database validation -make sure database exists (which it won't). These are the database validation, initialization and seeding:
 
 <details style="margin-bottom: 25px; margin-top: 25px;"> 
 	<summary>1. Application attempst to open database and it will not find it.</summary>
@@ -195,7 +195,7 @@ The current application contains the following questions:
 </ul>
 
 ### Data Validation and Flow
-As mentioned before validations are important in a CRM database. The application does all sorts of validations. Taking the Roles as an example: We are promoting an employee to a new Role. Application should allow user to change employee's current Role to a new one -the promoted Role. These are the application steps in the process:
+As mentioned before validations are important in a CMS Employee database. The application does all sorts of validations. Taking the Roles as an example: We are promoting an employee to a new Role. Application should allow user to change employee's current Role to a new one -the promoted Role. These are the application steps in the process:
 
 <details style="margin-bottom: 25px; margin-top: 25px;"> 
 	<summary>1. Select option to update Employee's Role from the dropdown list.</summary>
@@ -225,7 +225,7 @@ As mentioned before validations are important in a CRM database. The application
 
 ## Questions? Contact Me 
 
-The purpose of this SQL Employer Tracker is to help developers create their project Readme.md file that is required for ALL projects. Over time this application can save the developer lots of time, as this is a tedious process. The SQL Employer Tracker can be enhanced and there is growth for much more.
+The purpose of this CMS Employee Tracker is to help developers create their project Readme.md file that is required for ALL projects. Over time this application can save the developer lots of time, as this is a tedious process. The CMS Employee Tracker can be enhanced and there is growth for much more.
 
 Do not hesitate in contacting me, Gustavo Miller - gustavo.miller@miller-hs.com.
 
@@ -241,7 +241,7 @@ You may find the application at: https://github.com/gusmiller/CMS-Database/blob/
 
 MIT License
 
-Copyright (c) 2023 SQL Employer Tracker
+Copyright (c) 2023 CMS Employee Tracker
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
