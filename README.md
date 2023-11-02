@@ -3,11 +3,11 @@
 <p align="center"><img src="./assets/images/carleton-u-logo.jpg" height="250"></p>
 
 <p align="center" style="margin-top:25px; margin-bottom:50px;">
-	<a><img src="https://img.shields.io/static/v1.svg?label=javascript&message=Language&color=purple"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=nodejs&message=Inquirer&color=blue"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=Oracle&message=MySQL&color=blue"/></a>
-	<a><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=green"/></a>
+	<a href="https://developer.mozilla.org/en-US/docs/Web/javascript"><img src="https://img.shields.io/static/v1.svg?label=javascript&message=Language&color=purple"/></a>
+	<a href="https://www.npmjs.com/package/inquirer"><img src="https://img.shields.io/static/v1.svg?label=nodejs&message=Inquirer&color=blue"/></a>
+	<a href="https://www.npmjs.com/package/chalk"><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a>
+	<a href="https://www.mysql.com/products/workbench/"><img src="https://img.shields.io/static/v1.svg?label=Oracle&message=MySQL&color=blue"/></a>
+	<a href="https://en.wikipedia.org/wiki/MIT_License"><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=green"/></a>
 </p>
 
 # Carlton Coding Bootcamp Certification
@@ -249,7 +249,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-<a><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=yellow"/></a>
+<a href="https://en.wikipedia.org/wiki/MIT_License"><img src="https://img.shields.io/static/v1.svg?label=License&message=MIT&color=yellow"/></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
