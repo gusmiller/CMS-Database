@@ -152,20 +152,17 @@ The current application contains the following questions:
 
 <ul>
 	<li>Good Morning/Afternoon, what would you like to do today?</li>
-	<li>View Data</li>
+	<li>View All Employees
+	<li>View All Departments
+	<li>View All Roles
+	<li>View Data <span style="color:Cyan">(Bonus)</span></li>
 	<ul>
-		<li>View All Employees
-		<li>View All Departments
-		<li>View All Roles
+		<li>Employees by Manager</li>
+		<li>Employees by Managers (ALL)</li>
+		<li>Employees by Department</li>
+		<li>Departments Budget</li>
 	</ul>
-	<li>What information would you like to see?</li>
-		<ul>
-			<li>Employees by Manager</li>
-			<li>Employees by Managers (ALL)</li>
-			<li>Employees by Department</li>
-			<li>Departments Budget</li>
-		</ul>
-	<li>From where you want to delete data?</li>
+	<li>Delete Data <span style="color:Cyan">(Bonus)</span></li>
 	<ul>
 		<li>Delete Roles!</li>
 		<li>Delete Departments</li>
