@@ -39,7 +39,9 @@ const sql = {
     getemployeemanager: `select * from employee where manager_id=`,
     updateemployeemanager: `update employee set manager_id=null where manager_id=`,
     geteemployee: `select * from (select employee.*, concat_ws(" ", first_name, last_name) as fullname, role.title from employee join role on role.id=employee.role_id) as data `,
-    totalrecords: `select "Roles" as Tablename, count(id) as Total from role UNION select "Departments" as Tablename, count(id) from department UNION select "Employees" as Tablename, count(id) from employee;`
+    totalrecords: `select "Roles" as Tablename, count(id) as Total from role UNION select "Departments" as Tablename, count(id) from department UNION select "Employees" as Tablename, count(id) from employee;`,
+    getemployeesmanager:`select * from (select CONCAT_WS( " ", e.first_name, e.last_name ) as Fullname, CASE WHEN manager_id IS NULL THEN "No Manager" ELSE (select CONCAT_WS( " ", first_name, last_name) from employee where id=e.manager_id) END AS Manager from employee as e) as Data`,
+    getmanagers: `select CONCAT_WS( " ", first_name, last_name ) as Fullname from employee join role on role.id=employee.role_id where title like "%manager%";`
 }
 
 const messages = {

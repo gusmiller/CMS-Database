@@ -184,7 +184,27 @@ async function updateEmployee(emp, role) {
         sSql = `UPDATE employee SET role_id=(SELECT id FROM role WHERE title="${role.updaterole}") WHERE id=${ManagerId};`
 
         await connection.execute(sSql);
-        return chalk.bgCyanBright(`The user role has been added udated!`);
+        return chalk.bgCyanBright(`The Employee role has been added udated!`);
+
+    } catch (error) {
+        console.error(chalk.red('Error retrieving data:', error));
+
+    } finally {
+        connection.end(); // Close the database connection when done
+    }
+}
+
+async function updateEmployeeManager(emp, manager) {
+    const connection = await db.database(); // Get connection to database
+
+    try {
+        const EmployeeId = await getId(emp.updateemployee, connection);
+        const ManagerId = await getId(manager.reportmanager, connection);
+        
+        sSql = `UPDATE employee SET manager_id=${ManagerId} where id=${EmployeeId}`
+
+        await connection.execute(sSql);
+        return chalk.bgCyanBright(`The Employee Reporting Manager has been added udated!`);
 
     } catch (error) {
         console.error(chalk.red('Error retrieving data:', error));
@@ -274,4 +294,4 @@ async function loadRoles(questions, value) {
     }
 }
 
-module.exports = { getTable, addDepartment, addRole, loadRoles, addEmployee, updateEmployee, loadArray, executeSQL };
+module.exports = { getTable, addDepartment, addRole, loadRoles, addEmployee, updateEmployee, loadArray, executeSQL, updateEmployeeManager };

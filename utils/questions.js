@@ -30,6 +30,7 @@ const actionlist = [
     "Add a Role",
     "Add an Employee",
     "Update an Employee Role",
+    "Update Employee Reporting Manager",
     chalk.green("View Data"),
     chalk.red("Delete Data"),
     "Finish",
@@ -142,6 +143,16 @@ const updateRole = [
         pageSize: 25,
         message: chalk.cyanBright(`Select the new Role for the selected Employee?`),
         choices: rolesArray
+    }
+]
+
+const updateManager = [
+    {
+        type: 'list',
+        name: 'reportmanager',
+        pageSize: 25,
+        message: chalk.cyanBright(`Select the new Manager Employee will be reporting to.`),
+        choices: employeeArray
     }
 ]
 
@@ -303,4 +314,4 @@ function isNumeric(input) {
     return /^[0-9]+(\.[0-9]+)?$/.test(input);
 }
 
-module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray, yesnoConfirm, deleteConfirm, nodatabase }
+module.exports = { operations, department, roleactions, employee, updateEmployee, updateRole, viewdata, deletedata, departmentsArray, managersArray, rolesArray, employeeArray, yesnoConfirm, deleteConfirm, nodatabase, updateManager }

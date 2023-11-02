@@ -386,6 +386,41 @@ async function init() {
                 }
                 break;
 
+            case "Update Employee Reporting Manager":
+                await dataset.loadArray(questions, dic.sql.allemployees, "employees", "Cancel");
+
+                // Call inquirer and retrieve information from te user
+                const updatemanagerprompt = await inquirer.prompt(questions.updateEmployee);
+
+                // Validate user has not cancelled request. Note that this one differs from other validations
+                if (updatemanagerprompt.updateemployee !== "Cancel") {
+
+                    // Retrieve data from the employee table - this contains all fields from employee
+                    resultArr = await dataset.getTable(dic.sql.getemployeesmanager + ` where Fullname="${updatemanagerprompt.updateemployee}";`);
+                    const usermessage = `${updatemanagerprompt.updateemployee} currently reports to ${resultArr.rows[0].Manager}`
+                    format.messagelogger(dic.messages.employeerole, usermessage, null, 80);
+
+                    // Loads the list of managers into array to be used by the iquirer
+                    questions.employeeArray.length = 0;
+                    await dataset.loadArray(questions, dic.sql.getmanagers, "employees", "Cancel");
+
+                    // Call inquirer and retrieve new manager for the employee
+                    responseinquirer = await inquirer.prompt(questions.updateManager);
+
+                    // Validate user has not cancelled request. Note that this one is different than others
+                    if (responseinquirer.reportmanager !== "Cancel") {
+                        await dataset.updateEmployeeManager(updatemanagerprompt, responseinquirer);
+                        const updtMess = `${updatemanagerprompt.updateemployee} will now report to ${responseinquirer.reportmanager}`;
+                        format.messagelogger(updtMess, null, null, 80);
+                    } else {
+                        format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
+                    }
+
+                } else {
+                    format.messagelogger(dic.messages.requestcanceled); // Request was cancelled by user
+                }
+                break;
+
             case "Finish":
                 console.log("Thank you for participating!")
                 exit = true;
