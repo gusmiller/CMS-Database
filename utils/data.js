@@ -111,19 +111,19 @@ async function addEmployee(value) {
             return chalk.bgRed(`Employee ${value.firstname} ${value.lastname} (ID:${rows[0].id}) already exists!`);
         } else {
 
+            const roleSql = `SELECT id FROM role WHERE title="${value.rolename}"`;// Retrieves Role ID
+            [rows, fields] = await connection.execute(roleSql);
+            const RoleId = rows[0].id;
+
             if (value.manager !== undefined && value.manager !== "No Manager") {
                 const ManagerId = await getId(value);// Retrieve managers ID
-
-                const roleSql = `SELECT id FROM role WHERE title="${value.rolename}"`;// Retrieves Role ID
-                [rows, fields] = await connection.execute(roleSql);
-                const RoleId = rows[0].id;
 
                 // Builds INSERT SQL statement to run
                 sSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ` +
                     `("${value.firstname}", "${value.lastname}", ${RoleId}, ${ManagerId});`
             } else {
                 sSql = `INSERT INTO employee (first_name, last_name, role_id) VALUES ` +
-                    `("${value.firstname}", "${value.lastname}", ());`
+                    `("${value.firstname}", "${value.lastname}", ${RoleId});`
             }
 
             await connection.execute(sSql); // Executes the SQL Command - it does not return any value
@@ -200,7 +200,7 @@ async function updateEmployeeManager(emp, manager) {
     try {
         const EmployeeId = await getId(emp.updateemployee, connection);
         const ManagerId = await getId(manager.reportmanager, connection);
-        
+
         sSql = `UPDATE employee SET manager_id=${ManagerId} where id=${EmployeeId}`
 
         await connection.execute(sSql);
