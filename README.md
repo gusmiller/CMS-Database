@@ -37,7 +37,7 @@ The SQL Employer Tracker database was created in MySQL Server, using MSQY Workbe
 Here is my product!
 
 <div style="margin-top: 15px;">
-	<img src="./assets/images/SQL0001.png">
+	<img src="./assets/images/SQL0000.png">
 </div>
 </div>
 
@@ -49,20 +49,21 @@ Here is my product!
 
 1. Install Node 18 or later. You can use the package managerof your choice.
    Tests need to pass in Node 18 and 20.
-2. Clone this repository. [git clone git@github.com:gusmiller/CMS-Database.git][]
-3. Run `npm ci` to install the dependencies.
+2. Clone this repository : `git clone git@github.com:gusmiller/CMS-Database.git`
+3. Run `npm i` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
-5. Run `npm emp` to generate the database.
+5. When you run the application for the first time, database will be creaed.
 
-Note: you must have MySQL installed and configured in your computer, you will need a root user and a regular user, as we workbench installed. MySQL is developed by Oracle you can download a free version from their [website](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). To install MySQL follow this [installation guide](https://coding-boot-camp.github.io/full-stack/mysql/mysql-installation-guide). You will also need to install [npm dotenv](https://www.npmjs.com/package/dotenv), Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
+**Important Note**: you must have MySQL installed and configured in your computer, you will need a root user and a regular user, as we workbench installed. MySQL is developed by Oracle you can download a free version from their [website](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). To install MySQL follow this [installation guide](https://coding-boot-camp.github.io/full-stack/mysql/mysql-installation-guide). You will also need to install [npm dotenv](https://www.npmjs.com/package/dotenv), Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
 
-Once again we are using inquirer to create a CLI terminal application. We are combining the power of inquirer with Inquirer. We are also using a couple more libraries one of them will help us with the environment variables, which will protect our passwords and username.
+Once again we are using **inquirer** to create a **CLI terminal application**. We are combining the power of inquirer with Inquirer. We are also using a couple more libraries one of them will help us with the environment variables, which will protect our passwords and username.
 
 Once you have completed the configuration of MySQL then you can run manually the db/schema.sql -which contains NO data, or use the db/schemadata.sql which already contains data. Names used in this file a fake names obtained from [https://1000randomnames.com/](https://1000randomnames.com/) website. None are real other than my name Gustavo Miller. You can also trigger the following command to initialize the databse (with data):
 
 ```
 	mysql -u root -p
 	source db/schemadata.sql
+	source db/schema.sql
 ```
 
 Dependancies included in the package.json:
@@ -84,18 +85,18 @@ Dependancies included in the package.json:
 The following should list any major frameworks/libraries used to in the designing and coding of **SQL Employer Tracker application**.
 This section  bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* <a><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a> Make message colorful and pleasing to the eye
-* <a><img src="https://img.shields.io/static/v1.svg?label=Oracle&message=MySQL&color=blue"/></a> MySQL Workbench application
-* <a><img src="https://img.shields.io/static/v1.svg?label=npm&message=dotenv&color=green"/></a> Dotenv environment variables
-* <a><img src="https://img.shields.io/static/v1.svg?label=npm&message=Inquirer&color=magenta"/></a> Inquiere library to build interactive questionnaire applications
-* <a><img src="https://img.shields.io/static/v1.svg?label=MySQL&message=T-SQL&color=pink"/></a> Transac-SQL language to retrieve data from database - JOIN queries, Nested and aggregate queries 
-* <a><img src="https://img.shields.io/static/v1.svg?label=Javascrip&message=Coding&color=red"/></a> Use Javascript as the main language - used classes and module exports.
+* <a href="https://www.npmjs.com/package/chalk"><img src="https://img.shields.io/static/v1.svg?label=npm&message=Chalk&color=yellow"/></a> Make message colorful and pleasing to the eye
+* <a href="https://www.mysql.com/products/workbench/"><img src="https://img.shields.io/static/v1.svg?label=Oracle&message=MySQL&color=blue"/></a> MySQL Workbench application
+* <a href="https://www.npmjs.com/package/dotenv"><img src="https://img.shields.io/static/v1.svg?label=npm&message=dotenv&color=green"/></a> Dotenv environment variables
+* <a href="https://www.npmjs.com/package/inquirer"><img src="https://img.shields.io/static/v1.svg?label=npm&message=Inquirer&color=magenta"/></a> Inquiere library to build interactive questionnaire applications
+* <a href="https://www.tsql.info/"><img src="https://img.shields.io/static/v1.svg?label=MySQL&message=T-SQL&color=pink"/></a> Transac-SQL language to retrieve data from database - JOIN queries, Nested and aggregate queries 
+* <a href="https://developer.mozilla.org/en-US/docs/Web/javascript"><img src="https://img.shields.io/static/v1.svg?label=Javascrip&message=Coding&color=red"/></a> Use Javascript as the main language - used classes and module exports.
 
 <div id="database" style="margin-top: 25px;">
 
 ## Employee database
 
-The Employee database - hosted on Oracle MySQL is relatively simple, it contains 3 tables implemented with simple relationships to ensure data integrity. Also know as referential integrity. Tables and fields have been created using standing naming conventions. Primary keys are using in this case autoincremental numeric fields.
+The Employee database - hosted on <span style="color:cyan">Oracle MySQL</span> is relatively simple, it contains 3 tables implemented with simple relationships to ensure data integrity. Also know as referential integrity. Tables and fields have been created using standing naming conventions. Primary keys are using in this case autoincremental numeric fields.
 
 The folling is the database model of the Employee Database:
 
