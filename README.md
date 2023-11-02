@@ -168,11 +168,6 @@ The current application contains the following questions:
 		<li>Delete Departments</li>
 		<li>Delete Employee</li>
 	</ul>	
-	<li>Update Employee's Role</li>
-	<ul>
-		<li>Select the Employee you like to update?</li>
-		<li>Select the new Role for the selected Employee?</li>
-	</ul>
 	<li>Add a Department</li>
 	<ul>
 		<li>Please enter Name of Department you like to add</li>
@@ -189,6 +184,11 @@ The current application contains the following questions:
 		<li>Please enter Last name to add</li>
 		<li>Please enter what would be their Role</li>
 		<li>Who will be their manager?</li>
+	</ul>
+	<li>Update Employee's Role</li>
+	<ul>
+		<li>Select the Employee you like to update?</li>
+		<li>Select the new Role for the selected Employee?</li>
 	</ul>
 	<li>Finish</li>
 	<li>Clear Terminal</li>
