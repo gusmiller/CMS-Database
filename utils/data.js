@@ -15,7 +15,7 @@ const chalk = require("chalk");
  * @returns Table object
  */
 async function getTable(value) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     try {
 
@@ -42,7 +42,7 @@ async function getTable(value) {
  * @returns Message string
  */
 async function addDepartment(name) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     try {
         const [rows, fields] = await connection.execute(`SELECT * FROM department WHERE name="${name}"`);
@@ -67,7 +67,7 @@ async function addDepartment(name) {
  * @returns 
  */
 async function executeSQL(value) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
     try {
         await connection.execute(value);
         return chalk.green(`Process completed!`);
@@ -101,7 +101,7 @@ async function getId(value, ocnn) {
  * @returns 
  */
 async function addEmployee(value) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     try {
         let sSql = `SELECT id FROM employee WHERE first_name="${value.firstname}" AND last_name="${value.lastname}"`
@@ -143,7 +143,7 @@ async function addEmployee(value) {
  * @returns 
  */
 async function addRole(value) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     try {
         let sSql = `SELECT id FROM role ` +
@@ -176,7 +176,7 @@ async function addRole(value) {
  * @returns 
  */
 async function updateEmployee(emp, role) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     try {
         const ManagerId = await getId(emp.updateemployee, connection);
@@ -203,7 +203,7 @@ async function updateEmployee(emp, role) {
  * @param {string} additional - additional row to add.
  */
 async function loadArray(questions, sql, arrname, additional) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
     const [rows, fields] = await connection.execute(sql);
 
     for (const row of rows) {
@@ -257,7 +257,7 @@ async function loadArray(questions, sql, arrname, additional) {
  * @param {string} value - conditionals
  */
 async function loadRoles(questions, value) {
-    const connection = await db(); // Get connection to database
+    const connection = await db.database(); // Get connection to database
 
     if (value === undefined) {
         const [rows, fields] = await connection.execute("SELECT title FROM role");

@@ -11,13 +11,23 @@
  *******************************************************************/
 const chalk = require('chalk');
 
-const formatter = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD',});
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', });
 
-function messagelogger(value, add) {
+const parseSqlFile = (sqlFile) => {
+    return sqlFile
+        .toString()
+        .replace(/(\r\n|\n|\r)/gm, " ") // remove newlines
+        .replace(/\s+/g, ' ') // excess white space
+        .split(";") // split into all statements
+}
+
+function messagelogger(value, add, blankline, sizestring) {
     if (value === undefined) {
         console.log("");
         return;
     }
+
+    if (sizestring === undefined) { sizestring = 140 };
 
     // Validate for chalk colors
     if (value.lastIndexOf("39m") || value.lastIndexOf("49m")) {
@@ -29,21 +39,22 @@ function messagelogger(value, add) {
 
         // validate additional information to be added into the message. This will basically
         // inject the tail message to inherit the color
-        if(add!==undefined){
-            newvalue+= add;
+        if (add !== undefined && add !== null) {
+            newvalue += add;
         }
 
-        const padding = " ".repeat(140 - newvalue.length); // Build the fixed length string
+        const padding = " ".repeat(sizestring - newvalue.length); // Build the fixed length string
         console.log(firstthree + newvalue + padding + lastfive); // Put message all back togeher 
     } else {
         console.log(value);
     }
 
-    console.log("");
+    if (blankline === undefined || blankline === null) { console.log(""); }
+
     return;
 }
 
-function money(value){
+function money(value) {
     return formatter.format(value);
 };
 
@@ -55,14 +66,14 @@ function resize(value, size) {
     }
 }
 
-function nodata(value){
+function nodata(value) {
     console.log("");
     console.log(chalk.bgRed(value));
     console.log("");
 }
 
-function carletonlogo(){
-    
+function carletonlogo() {
+
     process.stdout.write("\x1Bc");
     console.log(chalk.white("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
     console.log("");
@@ -81,4 +92,4 @@ function carletonlogo(){
     console.log("");
 
 }
-module.exports = {money, resize, nodata, carletonlogo, messagelogger};
+module.exports = { money, resize, nodata, carletonlogo, messagelogger, parseSqlFile };
