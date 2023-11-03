@@ -125,9 +125,12 @@ async function init() {
                             if (responseinquirer.confirmdelete) {
                                 // SQL Statement to replace role already used. This is required or else the referential 
                                 // integrity will fail. We cannot delete the key
-                                let deleteSQL = dic.sql.replacerole.replace("param1", deleteId);
-                                await dataset.executeSQL(deleteSQL);
-                                await dataset.executeSQL(dic.sql.deleterole + `"${deleteId}"`)
+
+                                // Retrieve department to delete 
+                                let deletedep = await dataset.getTable(`select id from department where name="${deleteId}"`); 
+                                let tbadepart = await dataset.getTable(`select id from department where name="TBA"`); 
+                                await dataset.executeSQL(`update role set department_id=${tbadepart.rows[0].id} where department_id=${deletedep.rows[0].id}`);
+                                await dataset.executeSQL(`delete from department where id=${deletedep.rows[0].id}`);
                             }
 
                         } else {
