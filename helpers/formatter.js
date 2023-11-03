@@ -27,7 +27,7 @@ function messagelogger(value, add, blankline, sizestring) {
         return;
     }
 
-    if (sizestring === undefined) { sizestring = 140 };
+    if (sizestring === undefined || value.length > sizestring) { sizestring = 140 };
 
     // Validate for chalk colors
     if (value.lastIndexOf("39m") || value.lastIndexOf("49m")) {

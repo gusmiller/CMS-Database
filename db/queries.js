@@ -21,6 +21,7 @@ const chalk = require("chalk");
 const sql = {
     managers: 'select * from (select concat_ws(" ", first_name, last_name) as Manager from employee join role on employee.role_id=role.id where title like "%manager%") as data order by Manager;',
     departments: `SELECT id as value, name FROM department order by name;`,
+    departmentsnohr: `SELECT id as value, name FROM department where id not in (3,22) order by name`,
     roles: `SELECT id as value, title as name FROM role order by title;`,
     allroles: `SELECT R.title, R.id, D.name, R.salary FROM role R JOIN department D ON D.id=R.department_id`,
     employeelist: `SELECT id as value, CONCAT_WS( " ", first_name, last_name ) as name from employee`,
@@ -48,7 +49,7 @@ const messages = {
     mysqlLapps: chalk.bgRed("Carleton Universty Coding Bootcamp"),
     departmentused: chalk.bgRed("Department has already been assigned to roles! Roles will be re-assigned to TBA department."),
     roleused: chalk.bgRed("Role is already been assigned to Employees! In case you delete Role, Empoyees would be assigned TBA Role"),
-    employeebymanagers: chalk.bgWhite("List of ALL Employees order by management"),
+    employeebymanagers: chalk.bgWhite("List of ALL Employees order by Manager and Employee Fullname"),
     employeesbydepartment: chalk.bgWhite("List of Employees by Department"),
     departmentsbudget: chalk.bgWhite("Departments budget"),
     viewallemployees: chalk.bgWhite("Information from Employees Table"),

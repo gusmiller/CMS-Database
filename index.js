@@ -98,7 +98,8 @@ async function init() {
 
                 // Inquierer uses arrays for its options; we need to load this information dynamically,
                 // it is possible that user added new data. Information cannot be harcoded.
-                await dataset.loadArray(questions, dic.sql.departments, "departments", "Go back");
+                questions.departmentsArray.length = 0; // Clear departments - exclude Human Resources
+                await dataset.loadArray(questions, dic.sql.departmentsnohr, "departments", "Go back");
                 await dataset.loadArray(questions, dic.sql.roles, "rolesarray", "Go back");
                 await dataset.loadArray(questions, dic.sql.employeelist, "employeesall", "Go back");
 
@@ -109,6 +110,7 @@ async function init() {
                 switch (responseinquirer.actionperform) {
                     case "Delete Departments":
                         deleteId = responseinquirer.deletedKey;
+                        
                         sSql = dic.sql.validatedepartment + ` where name="${responseinquirer.deletedKey}"`;
                         response = await dataset.getTable(sSql); // Retrieve data from table
 
@@ -191,7 +193,7 @@ async function init() {
 
                 switch (responseinquirer.actionperform) {
                     case "Employees by Managers (ALL)":
-                        sSql = dic.sql.empbymanager + ` order by Manager, id`
+                        sSql = dic.sql.empbymanager + ` order by Manager, Fullname`
                         response = await dataset.getTable(sSql); // Retrieve data from table
                         format.messagelogger(dic.messages.employeebymanagers, null, null, 80)
 

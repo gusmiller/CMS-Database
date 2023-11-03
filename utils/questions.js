@@ -160,6 +160,7 @@ const department = [
     {
         type: "input",
         name: "department",
+        pageSize: 20,
         message: chalk.magenta("Please enter Name of Department you like to add (enter exit to end):"),
         validate(answer) {
             if (answer.length == 0) {

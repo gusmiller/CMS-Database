@@ -51,7 +51,7 @@ async function addDepartment(name) {
             return chalk.bgRed(`Department ${name} (ID:${rows[0].id}) already exists!`);
         } else {
             await connection.execute(`INSERT INTO department (name) VALUES ("${name}")`);
-            return chalk.green(`Department ${name} has been added!`);
+            return chalk.bgGreenBright(`Department ${name} has been added!`);
         }
     } catch (error) {
         console.error(chalk.red('Error retrieving data:', error));
