@@ -28,9 +28,9 @@
 
 ## CMS Employee Tracker
 
-As we advance in our training we learn new skills and technology. This week is all about SQL - MySQL. Based on the assignments description we have this challenge. Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
+As we advance in our training, we learn new skills and technology. This week is all about SQL - MySQL. Based on the assignments description we have this challenge. Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
-Once again we are 
+Once again, we are building a CLI application using NPM packages, such as Inquirer, Dotenv and Oracle MySQL2 which offers a Promise in return. The data as expected will reside in a MySQL database. Data contains already Employees, Departments and Roles that have somehow a normal configuration as in any organization.
 
 The CMS Employee Tracker database was created in MySQL Server, using MSQY Workbench, but I have included a script that creates the database in case required. The initial database will not have any data; there is no seeding scripts. Once again
 
@@ -96,9 +96,9 @@ This section  bootstrap your project. Leave any add-ons/plugins for the acknowle
 
 ## Employee database
 
-The Employee database - hosted on <span style="color:cyan">Oracle MySQL</span> is relatively simple, it contains 3 tables implemented with simple relationships to ensure data integrity. Also know as referential integrity. Tables and fields have been created using standing naming conventions. Primary keys are using in this case autoincremental numeric fields.
+The Employee database - hosted on <span style="color:cyan">Oracle MySQL</span> is relatively simple, it contains 3 tables implemented with simple relationships to ensure data integrity. Also known as referential integrity. Tables and fields have been created using standing naming conventions. Primary keys are using in this case autoincremental numeric fields.
 
-The folling is the database model of the Employee Database:
+The following image shows the database model for the Employee Database:
 
 <div style="margin-right:30px;margin-top: 15px;">
 	<p align="center"><img src="./assets/images/SQL0010.png" height="300"></p>
@@ -123,13 +123,13 @@ All queries that produce a dataset are shown formatted in columns with desire co
 
 ## Application Usage
 
-The application is very simple and easy to use. User will be presented with a number of predefined options from where they can decide which data to retrieve from database. Database can initialized and seeded with fake names, department names, and roles, to mimic a real corporation organizatin. It is critical and part of a database design that we prevent data duplication. Therefore, when creating new departments, roles or employees profiles, the application will validate whether this information already exists or not, Proper message will be displayed to the user in case information already exist.
+The application is very simple and easy to use. User will be presented with a number of predefined options from where they can decide which data to retrieve from database. Database is initialized and seeded with fake names, department names, and roles, to mimic a real corporation organization. It is critical and part of a database design that we prevent data duplication. Therefore, when creating new departments, roles or employee's profiles, the application will validate whether this information already exists or not, Proper message will be displayed to the user in case information already exist.
 
 But first we need a database. Read the following section to review how database is created.
 
 ### Database Intialization
 
-The CMS Employee Tracker requires a the CMS Employee database to be initialized before it can be used. I have provided scripts that can run from the MySQL Shell or MySQL Workbench, but the application database can be generated on the 'fly'. This allows inexperienced users to use the application when they launch it for the first time. When launching application for the first time, it performs a database validation -make sure database exists (which it won't). These are the database validation, initialization and seeding:
+The CMS Employee Tracker requires the CMS Employee database to be initialized before it can be used. I have provided scripts that can run from the MySQL Shell or MySQL Workbench, but the application database can be generated on the 'fly'. This allows inexperienced users to use the application when they launch it for the first time. When launching application for the first time, it performs a database validation -make sure database exists (which it won't). These are the database validation, initialization and seeding:
 
 <details style="margin-bottom: 25px; margin-top: 25px;"> 
 	<summary>1. Application attempst to open database and it will not find it.</summary>
